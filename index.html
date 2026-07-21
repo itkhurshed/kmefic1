@@ -237,6 +237,7 @@
   .tilt-card{transition:transform .18s cubic-bezier(.22,1,.36,1), box-shadow .18s;will-change:transform;}
   .hero .spot{position:absolute;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity .5s var(--ease);background:radial-gradient(circle 260px at var(--mx,50%) var(--my,50%),rgba(255,255,255,.12),transparent 60%);}
   .hero:hover .spot{opacity:1;}
+  .hero canvas.market-chart{position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:.45;pointer-events:none;}
   .ripple-ink{position:absolute;border-radius:50%;transform:scale(0);background:rgba(255,255,255,.55);pointer-events:none;animation:rippleAnim .65s ease-out forwards;}
   @keyframes rippleAnim{to{transform:scale(3);opacity:0;}}
   .cta-btn, .help button, #btnGo, .readmore, .more-btn{position:relative;overflow:hidden;}
@@ -470,6 +471,7 @@
 
 <section class="hero" id="about">
   <div class="spot"></div>
+  <canvas class="market-chart" id="marketChart3"></canvas>
   <div class="cover-photo"><img src="https://lh3.googleusercontent.com/d/12PO2EOAveg8noNTTKsSh24U8KNOGh6kb=w1600" alt="Dream. Plan. Do. Repeat." loading="lazy" onerror="this.parentElement.style.display='none'"></div>
   <div class="blob b1"></div>
   <div class="blob b2"></div>
@@ -1033,6 +1035,70 @@
       hero.style.setProperty('--my', ((e.clientY-r.top)/r.height*100)+'%');
     });
   });
+
+  // ---------- Animated market chart canvas (hero) ----------
+  (function(){
+    const canvas = document.getElementById('marketChart3');
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w=0, h=0, dpr=1;
+    function resize(){
+      dpr = window.devicePixelRatio || 1;
+      w = canvas.offsetWidth; h = canvas.offsetHeight;
+      canvas.width = w*dpr; canvas.height = h*dpr;
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    const cs = getComputedStyle(document.documentElement);
+    let lineColor = '#4fd1c5';
+    for (const v of ['--neon','--accent','--gold','--violet']){
+      const val = cs.getPropertyValue(v).trim();
+      if (val){ lineColor = val; break; }
+    }
+    const N = 60;
+    let points = [];
+    let lastVal = h*0.6;
+    for (let i=0;i<N;i++){
+      lastVal += (Math.random()-0.42)*h*0.05;
+      lastVal = Math.max(h*0.15, Math.min(h*0.85, lastVal));
+      points.push(lastVal);
+    }
+    let offset = 0;
+    function frame(){
+      if(!w||!h){ requestAnimationFrame(frame); return; }
+      const stepPx = w/(N-1);
+      offset += 0.4;
+      if (offset >= stepPx){
+        offset = 0;
+        points.shift();
+        let next = points[points.length-1] + (Math.random()-0.42)*h*0.06;
+        next = Math.max(h*0.15, Math.min(h*0.85, next));
+        points.push(next);
+      }
+      ctx.clearRect(0,0,w,h);
+      ctx.beginPath();
+      points.forEach((y,i)=>{
+        const x = i*stepPx - offset;
+        if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      });
+      ctx.strokeStyle = lineColor;
+      ctx.lineWidth = 2;
+      ctx.lineJoin = 'round';
+      ctx.shadowColor = lineColor;
+      ctx.shadowBlur = 8;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+      ctx.lineTo(w,h); ctx.lineTo(0,h); ctx.closePath();
+      const grad = ctx.createLinearGradient(0,0,0,h);
+      grad.addColorStop(0, lineColor+'33');
+      grad.addColorStop(1, lineColor+'00');
+      ctx.fillStyle = grad;
+      ctx.fill();
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
 
   const burger = document.getElementById('burger');
   const mainnav = document.getElementById('mainnav');
