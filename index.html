@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KMEFIC — Kuwait Middle East Financial Investment Company</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0d14;
+    --panel:#12161f;
+    --panel2:#161b26;
+    --line:rgba(255,255,255,.09);
+    --text:#e4e7ee;
+    --muted:#8b93a7;
+    --neon:#00e5c7;
+    --slate:#7c6cf0;
+    --gold:#ffb703;
+    --violet:#ff2fb8;
+    --grad:linear-gradient(120deg,#00e5c7,#ff2fb8);
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'Inter','Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden;position:relative;}
+  body.lang-ar{font-family:'Tajawal','Inter',Arial,sans-serif;}
+  h1,h2,h3,.brandfont{font-family:'Space Grotesk',Arial,sans-serif;}
+  body.lang-ar h1,body.lang-ar h2,body.lang-ar h3{font-family:'Tajawal','Space Grotesk',Arial,sans-serif;}
+  a{text-decoration:none;color:inherit;}
+  ul{list-style:none;}
+  .container{max-width:1200px;margin:0 auto;padding:0 24px;}
+  ::selection{background:var(--neon);color:#05070d;}
+  button{font-family:inherit;cursor:pointer;}
+  [dir="rtl"] .svc-card a span, [dir="rtl"] .more-btn span{display:inline-block;transform:scaleX(-1);}
+
+  #preloader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;transition:opacity .7s var(--ease), visibility .7s var(--ease);}
+  #preloader.done{opacity:0;visibility:hidden;}
+  .pl-bar{width:150px;height:2px;background:rgba(255,255,255,.1);position:relative;overflow:hidden;border-radius:2px;}
+  .pl-bar::after{content:"";position:absolute;left:-40%;top:0;bottom:0;width:40%;background:linear-gradient(90deg,var(--slate),var(--neon));animation:load 1.1s ease-in-out infinite;}
+  @keyframes load{0%{left:-40%;}100%{left:100%;}}
+  .pl-label{font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;}
+
+  #progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--slate),var(--neon),var(--gold));z-index:1200;width:0%;transition:width .1s linear;}
+  #bgcanvas{position:fixed;inset:0;z-index:0;opacity:.25;}
+  body::before{content:"";position:fixed;inset:0;background:
+    radial-gradient(circle at 15% 10%, rgba(91,124,153,.1), transparent 40%),
+    radial-gradient(circle at 85% 25%, rgba(79,168,158,.08), transparent 45%);
+    pointer-events:none;z-index:0;}
+
+  header{position:sticky;top:0;z-index:1000;background:rgba(10,13,20,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);transition:box-shadow .3s;}
+  header.shrink{box-shadow:0 8px 28px rgba(0,0,0,.4);}
+  .navwrap{display:flex;align-items:center;justify-content:space-between;height:74px;transition:height .35s var(--ease);}
+  header.shrink .navwrap{height:60px;}
+  .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:18px;letter-spacing:.3px;animation:logoIntro .8s var(--ease) .1s both;}
+  @keyframes logoIntro{from{opacity:0;transform:translateY(-8px) scale(.94);}to{opacity:1;transform:translateY(0) scale(1);}}
+  .logo .mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--slate),var(--neon));display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#05070d;transition:.4s var(--ease);position:relative;overflow:hidden;}
+  .logo .mark::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(115deg,transparent,rgba(255,255,255,.5),transparent);animation:shimmer 4.5s ease-in-out infinite;z-index:2;}
+  .logo .mark img{width:100%;height:100%;object-fit:cover;object-position:top center;background:#fff;}
+  @keyframes shimmer{0%{left:-60%;}45%{left:130%;}100%{left:130%;}}
+  .logo span{color:var(--neon);}
+
+  nav.mainnav > ul{display:flex;gap:2px;}
+  nav.mainnav > ul > li{position:relative;}
+  nav.mainnav > ul > li > a{display:block;padding:27px 13px;font-size:13.5px;font-weight:500;color:#b7bfcf;position:relative;transition:color .3s, padding .35s var(--ease);}
+  header.shrink nav.mainnav > ul > li > a{padding:20px 13px;}
+  nav.mainnav > ul > li > a::after{content:"";position:absolute;left:13px;right:13px;bottom:20px;height:2px;background:var(--neon);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease);}
+  nav.mainnav > ul > li:hover > a::after{transform:scaleX(1);}
+  nav.mainnav > ul > li:hover > a{color:var(--neon);}
+  .dropdown{position:absolute;top:100%;left:0;background:var(--panel2);min-width:240px;padding:10px;border-radius:14px;border:1px solid var(--line);box-shadow:0 30px 60px rgba(0,0,0,.5);opacity:0;visibility:hidden;transform:translateY(10px);transition:.28s var(--ease);max-height:70vh;overflow-y:auto;}
+  nav.mainnav > ul > li:hover .dropdown{opacity:1;visibility:visible;transform:translateY(0);}
+  .dropdown li a{display:block;padding:9px 12px;font-size:12.5px;border-radius:8px;color:#9aa2b3;transition:.2s;}
+  .dropdown li a:hover{background:rgba(79,168,158,.08);color:var(--neon);}
+  .dropdown .sub{margin:2px 0 6px 14px;padding-left:10px;border-left:2px solid var(--line);}
+  .dropdown .sub li a{font-size:11.5px;color:#727a8c;}
+  .navright{display:flex;align-items:center;gap:14px;}
+  #langToggle{font-size:12.5px;color:var(--muted);font-weight:600;background:none;border:1px solid var(--line);padding:7px 13px;border-radius:999px;transition:.25s;}
+  #langToggle:hover{border-color:var(--neon);color:var(--neon);}
+  .cta-btn{background:var(--grad);color:#05070d!important;padding:11px 20px;border-radius:999px;font-size:13px!important;font-weight:700!important;transition:transform .3s var(--ease), box-shadow .3s;}
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,229,199,.3);}
+
+  .burger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:8px;z-index:1100;}
+  .burger span{width:22px;height:2px;background:var(--neon);transition:.35s var(--ease);}
+  .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .burger.open span:nth-child(2){opacity:0;}
+  .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .85s var(--ease), transform .85s var(--ease);}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  .ticker{background:var(--panel);border-bottom:1px solid var(--line);overflow:hidden;position:relative;z-index:1;}
+  .ticker-track{display:flex;gap:46px;width:max-content;padding:9px 0;animation:tickerx 32s linear infinite;}
+  .ticker:hover .ticker-track{animation-play-state:paused;}
+  .ticker-track span{font-size:12px;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:8px;}
+  .ticker-track span b{color:var(--text);font-weight:700;}
+  .ticker-track .up{color:var(--neon);}
+  .ticker-track .down{color:#c07a7a;}
+  @keyframes tickerx{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  .hero{padding:76px 0 54px;position:relative;z-index:1;}
+  .hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;background:var(--grad);z-index:2;opacity:.85;}
+  .hero .cover-photo{position:absolute;inset:0;z-index:0;overflow:hidden;}
+  .hero .cover-photo img{width:100%;height:100%;object-fit:cover;opacity:.24;animation:coverpan 36s ease-in-out infinite alternate;}
+  @keyframes coverpan{0%{transform:scale(1.05) translate(0,0);}100%{transform:scale(1.18) translate(-2%,-1.5%);}}
+  .hero .cover-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(160deg, var(--bg) 12%, rgba(10,13,20,.9) 55%, var(--bg) 100%);}
+  .logo-spark{display:inline-block;color:var(--gold);font-size:15px;line-height:1;margin-right:1px;animation:sparkle 2.4s ease-in-out infinite;}
+  @keyframes sparkle{0%,100%{opacity:.4;transform:scale(.7) rotate(0deg);}50%{opacity:1;transform:scale(1.2) rotate(15deg);}}
+  .hero .blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0;}
+  .hero .blob.b1{width:380px;height:380px;background:var(--neon);opacity:.20;top:-140px;right:6%;animation:blobmove 16s ease-in-out infinite;}
+  .hero .blob.b2{width:300px;height:300px;background:var(--violet);opacity:.20;bottom:-110px;left:4%;animation:blobmove 20s ease-in-out infinite reverse;}
+  @keyframes blobmove{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(30px,-22px) scale(1.15);}}
+  .hero .container{display:flex;gap:56px;align-items:center;flex-wrap:wrap;}
+  .hero-left{flex:1.2;min-width:320px;}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(255,255,255,.02);color:var(--neon);font-size:11.5px;font-weight:700;padding:7px 15px;border-radius:999px;margin-bottom:20px;letter-spacing:.4px;text-transform:uppercase;}
+  .eyebrow .dot{width:5px;height:5px;border-radius:50%;background:var(--neon);}
+  .hero h1{font-size:40px;font-weight:700;letter-spacing:-.6px;line-height:1.2;margin-bottom:18px;}
+  .hero h1 .grad{color:var(--neon);}
+  .hero p{color:var(--muted);font-size:15.5px;max-width:520px;margin-bottom:28px;}
+  .actions{display:flex;gap:12px;}
+  .btn-primary{background:var(--grad);color:#05070d;padding:14px 26px;border-radius:11px;font-weight:700;font-size:14px;transition:transform .3s var(--ease), box-shadow .3s;display:inline-block;border:none;}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(255,47,184,.25);}
+  .btn-ghost{border:1px solid var(--line);padding:14px 26px;border-radius:11px;font-weight:700;font-size:14px;color:var(--text);transition:.3s;background:transparent;}
+  .btn-ghost:hover{border-color:var(--neon);color:var(--neon);}
+
+  .hero-right{flex:1;min-width:280px;}
+  .glass{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:20px;padding:28px;backdrop-filter:blur(10px);position:relative;overflow:hidden;}
+  .glass .as-of{font-size:11.5px;color:var(--muted);margin-bottom:18px;letter-spacing:.4px;position:relative;}
+  .statrow{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--line);position:relative;}
+  .statrow:last-child{border-bottom:none;}
+  .statrow .label{font-size:13px;color:#aeb5c4;}
+  .statrow .value{font-size:19px;font-weight:800;font-variant-numeric:tabular-nums;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .statfoot{font-size:10px;color:#5f6576;margin-top:12px;position:relative;}
+
+  .help{margin:0 0 88px;position:relative;z-index:1;}
+  .helpcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:24px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+  .helpcard h3{font-size:16px;font-weight:700;white-space:nowrap;}
+  .helpcard select{flex:1;min-width:180px;padding:13px 15px;border-radius:10px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-size:13.5px;font-family:inherit;}
+  .helpcard select:focus{outline:none;border-color:var(--neon);}
+  .helpcard select.err{border-color:#c07a7a;animation:shake .4s;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);}}
+  .helpcard button{padding:13px 28px;border-radius:10px;border:none;background:var(--grad);color:#05070d;font-weight:700;font-size:13.5px;transition:transform .3s var(--ease);}
+  .helpcard button:hover{transform:translateY(-2px);}
+  .help-msg{width:100%;font-size:12px;color:#c07a7a;display:none;}
+  .help-msg.show{display:block;}
+
+  .section{padding:78px 0;position:relative;z-index:1;}
+  .section.compact{padding:56px 0;}
+  .section-head{margin-bottom:42px;}
+  .section-head h2{font-size:28px;font-weight:700;letter-spacing:-.4px;}
+  .section-head p.lead{color:var(--muted);font-size:14.5px;max-width:520px;margin-top:12px;}
+
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .svc-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:26px 24px;transition:.35s var(--ease);position:relative;overflow:hidden;}
+  .svc-card:hover{border-color:rgba(79,168,158,.35);transform:translateY(-5px);}
+  .svc-photo{height:140px;border-radius:12px;overflow:hidden;position:relative;margin-bottom:18px;background:var(--panel2);}
+  .svc-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kenburns 26s ease-in-out infinite alternate;filter:saturate(1) contrast(1.02);}
+  @keyframes kenburns{0%{transform:scale(1) translate(0,0);}100%{transform:scale(1.1) translate(-1.5%,-1.5%);}}
+  .svc-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%, rgba(10,13,20,.75));}
+  .svc-card .icon{width:40px;height:40px;border-radius:11px;background:rgba(79,168,158,.14);backdrop-filter:blur(6px);color:var(--neon);display:flex;align-items:center;justify-content:center;font-size:17px;position:absolute;bottom:10px;right:10px;z-index:2;border:1px solid rgba(79,168,158,.28);}
+  [dir="rtl"] .svc-card .icon{right:auto;left:10px;}
+  .svc-card h3{font-size:18px;font-weight:700;margin-bottom:10px;position:relative;}
+  .svc-card p{color:var(--muted);font-size:13.5px;margin-bottom:12px;position:relative;}
+  .svc-card .extra{max-height:0;overflow:hidden;transition:max-height .5s var(--ease);color:var(--muted);font-size:13px;position:relative;}
+  .svc-card .extra.open{max-height:200px;margin-bottom:12px;}
+  .svc-card .more-btn{font-size:13px;font-weight:700;color:var(--gold);position:relative;display:inline-flex;gap:6px;background:none;border:none;font-family:inherit;}
+  .svc-card .more-btn span{transition:transform .3s;}
+  .svc-card .more-btn.open span{transform:rotate(90deg);}
+
+  .chipband{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+  .chipband a{border:1px solid var(--line);padding:12px 24px;border-radius:999px;font-weight:700;font-size:13px;background:var(--panel);transition:.3s var(--ease);}
+  .chipband a:hover{border-color:var(--neon);color:var(--neon);}
+
+  .newsgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .newscard{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.35s var(--ease);}
+  .newscard:hover{transform:translateY(-5px);border-color:rgba(79,168,158,.25);}
+  .newscard .thumb{height:140px;position:relative;overflow:hidden;background:var(--panel2);}
+  .newscard .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kenburns 30s ease-in-out infinite alternate;}
+  .newscard .body{padding:20px;}
+  .newscard .tag{font-size:11.5px;color:var(--neon);font-weight:700;margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;}
+  .newscard h4{font-size:15.5px;font-weight:700;margin-bottom:10px;}
+  .newscard .extra{max-height:0;overflow:hidden;transition:max-height .5s var(--ease);color:var(--muted);font-size:12.5px;}
+  .newscard .extra.open{max-height:160px;margin-bottom:10px;}
+  .newscard button.more{font-size:12px;color:var(--muted);font-weight:600;background:none;border:none;font-family:inherit;}
+  .morenews{text-align:center;margin-top:36px;}
+  .morenews a{font-weight:700;font-size:13.5px;color:var(--gold);border-bottom:2px solid var(--gold);padding-bottom:3px;transition:.3s;}
+  .morenews a:hover{color:var(--neon);border-color:var(--neon);}
+
+  .slider{position:relative;max-width:920px;margin:0 auto;border-radius:16px;overflow:hidden;box-shadow:0 24px 55px rgba(0,0,0,.4);border:1px solid var(--line);}
+  .slider-track{display:flex;transition:transform .7s var(--ease);}
+  .slide{min-width:100%;position:relative;height:400px;background:var(--panel);opacity:.4;transform:scale(.93);transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  .slide.active{opacity:1;transform:scale(1);}
+  .slide img{width:100%;height:100%;object-fit:cover;}
+  .slide .cap{position:absolute;left:0;right:0;bottom:0;padding:22px 26px;background:linear-gradient(0deg, rgba(0,0,0,.8), transparent);font-size:14.5px;font-weight:700;color:#fff;transform:translateY(14px);opacity:0;transition:transform .6s var(--ease) .15s, opacity .6s var(--ease) .15s;}
+  .slide.active .cap{transform:translateY(0);opacity:1;}
+  .slider-progress{height:3px;background:var(--line);border-radius:3px;overflow:hidden;max-width:220px;margin:16px auto 0;}
+  .slider-progress-bar{height:100%;width:0%;background:var(--grad);border-radius:3px;}
+  .slider-progress-bar.animate{animation:sliderprogress 4.5s linear forwards;}
+  .slider:hover .slider-progress-bar{animation-play-state:paused;}
+  @keyframes sliderprogress{from{width:0%;}to{width:100%;}}
+  .slider-btn{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;border-radius:50%;background:rgba(5,7,13,.55);border:1px solid var(--neon);color:var(--neon);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:.3s;z-index:3;}
+  .slider-btn:hover{background:var(--neon);color:#05070d;}
+  .slider-btn.prev{left:14px;}
+  .slider-btn.next{right:14px;}
+  .slider-dots{display:flex;gap:8px;justify-content:center;margin-top:18px;}
+  .slider-dots button{width:8px;height:8px;border-radius:50%;background:var(--line);border:none;padding:0;cursor:pointer;transition:.3s;}
+  .slider-dots button.active{background:var(--neon);width:22px;border-radius:5px;}
+  @media(max-width:700px){.slide{height:240px;}}
+
+  .subs{text-align:center;}
+  .subgrid{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+  .subgrid a{border:1px solid var(--line);padding:13px 26px;border-radius:999px;font-weight:700;font-size:13.5px;background:var(--panel);transition:.3s var(--ease);}
+  .subgrid a:hover{border-color:var(--neon);color:var(--neon);}
+
+  footer{background:#070911;border-top:1px solid var(--line);color:var(--muted);padding:64px 0 22px;position:relative;z-index:1;}
+  .footgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:36px;margin-bottom:40px;}
+  .footgrid h5{color:#fff;font-size:13px;margin-bottom:16px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
+  .footgrid ul li{margin-bottom:9px;font-size:13px;}
+  .footgrid ul li a{transition:.25s;}
+  .footgrid ul li a:hover{color:var(--neon);}
+  .social{display:flex;gap:10px;margin-top:16px;}
+  .social a{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12.5px;transition:.3s var(--ease);}
+  .social a:hover{background:var(--neon);color:#05070d;}
+  .footbottom{border-top:1px solid var(--line);padding-top:20px;text-align:center;font-size:12px;display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap;}
+  .admin-link{color:#4d5567;font-size:10.5px;letter-spacing:.5px;border:1px solid var(--line);padding:5px 12px;border-radius:999px;transition:.3s;background:none;font-family:inherit;}
+  .admin-link:hover{color:var(--neon);border-color:var(--neon);}
+
+  #toTop{position:fixed;right:26px;bottom:92px;width:44px;height:44px;border-radius:50%;background:var(--panel);border:1px solid var(--neon);color:var(--neon);display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;opacity:0;visibility:hidden;transform:translateY(16px);transition:.35s var(--ease);z-index:900;}
+  #toTop.show{opacity:1;visibility:visible;transform:translateY(0);}
+  #toTop:hover{background:var(--neon);color:#05070d;}
+  [dir="rtl"] #toTop{right:auto;left:26px;}
+
+  .wa-fab{position:fixed;right:26px;bottom:26px;width:54px;height:54px;border-radius:50%;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;font-size:25px;z-index:950;box-shadow:0 10px 24px rgba(37,211,102,.3);transition:.3s var(--ease);border:none;}
+  .wa-fab:hover{transform:scale(1.06);}
+  [dir="rtl"] .wa-fab{right:auto;left:26px;}
+  .wa-panel{position:fixed;right:26px;bottom:88px;width:320px;max-width:calc(100vw - 40px);background:var(--panel2);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 25px 60px rgba(0,0,0,.5);z-index:1400;display:none;flex-direction:column;max-height:70vh;}
+  [dir="rtl"] .wa-panel{right:auto;left:26px;}
+  .wa-panel.show{display:flex;}
+  .wa-head{background:#25D366;color:#fff;padding:14px 16px;display:flex;align-items:center;gap:12px;}
+  .wa-head .avatar{width:34px;height:34px;border-radius:50%;background:#fff;color:#25D366;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12.5px;flex-shrink:0;}
+  .wa-head .info b{display:block;font-size:13px;}
+  .wa-head .info span{font-size:10.5px;opacity:.9;display:flex;align-items:center;gap:5px;}
+  .wa-head .info .online{width:6px;height:6px;background:#c8ffd4;border-radius:50%;display:inline-block;}
+  .wa-close{margin-left:auto;background:none;border:none;color:#fff;font-size:18px;cursor:pointer;}
+  .wa-body{flex:1;overflow-y:auto;padding:14px;background:#0b0f18;display:flex;flex-direction:column;gap:9px;}
+  .wa-msg{max-width:80%;padding:8px 12px;border-radius:10px;font-size:12px;line-height:1.4;}
+  .wa-msg.bot{background:var(--panel);color:var(--text);align-self:flex-start;border-top-left-radius:2px;border:1px solid var(--line);}
+  .wa-msg.user{background:#173a30;color:#d9f2ea;align-self:flex-end;border-top-right-radius:2px;}
+  .wa-msg .time{display:block;font-size:9px;color:#6d7485;margin-top:3px;text-align:right;}
+  .wa-typing{align-self:flex-start;background:var(--panel);border:1px solid var(--line);padding:8px 12px;border-radius:10px;border-top-left-radius:2px;display:flex;gap:4px;}
+  .wa-typing span{width:6px;height:6px;background:var(--muted);border-radius:50%;animation:typingdot 1.2s infinite;display:inline-block;}
+  .wa-typing span:nth-child(2){animation-delay:.2s;}
+  .wa-typing span:nth-child(3){animation-delay:.4s;}
+  @keyframes typingdot{0%,60%,100%{opacity:.3;transform:translateY(0);}30%{opacity:1;transform:translateY(-3px);}}
+  .wa-quick{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;background:var(--panel2);border-top:1px solid var(--line);}
+  .wa-quick button{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 11px;font-size:10.5px;font-weight:600;color:var(--text);cursor:pointer;}
+  .wa-quick button:hover{background:#25D366;color:#fff;border-color:#25D366;}
+  .wa-foot{padding:10px 14px;background:var(--panel2);border-top:1px solid var(--line);display:flex;gap:8px;}
+  .wa-foot input{flex:1;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:999px;padding:9px 14px;font-size:12px;font-family:inherit;}
+  .wa-foot button{background:#25D366;color:#fff;border:none;width:36px;height:36px;border-radius:50%;font-size:14px;flex-shrink:0;cursor:pointer;}
+  .wa-cta{display:block;text-align:center;background:#128C7E;color:#fff;padding:10px;font-size:12px;font-weight:700;cursor:pointer;border:none;width:100%;}
+
+  .admin-fab{position:fixed;left:26px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--panel);border:1px solid var(--slate);color:var(--slate);display:flex;align-items:center;justify-content:center;font-size:17px;z-index:900;transition:.3s var(--ease);}
+  .admin-fab:hover{background:var(--slate);color:#05070d;}
+  [dir="rtl"] .admin-fab{left:auto;right:26px;bottom:146px;}
+  .notif-fab{position:fixed;left:78px;bottom:26px;width:44px;height:44px;border-radius:50%;background:var(--panel);border:1px solid var(--slate);color:var(--slate);display:flex;align-items:center;justify-content:center;font-size:17px;z-index:900;transition:.3s var(--ease);}
+  .notif-fab:hover{background:var(--slate);color:#05070d;}
+  .notif-badge{position:absolute;top:-4px;right:-4px;background:#c0392b;color:#fff;font-size:10px;font-weight:800;min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
+
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.show{display:flex;}
+  .modal-box{background:var(--panel2);border:1px solid var(--line);width:100%;max-width:380px;border-radius:16px;padding:32px 28px;position:relative;box-shadow:0 35px 80px rgba(0,0,0,.55);animation:modalIn .35s var(--ease);}
+  @keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+  .modal-box h3{font-size:19px;margin-bottom:6px;color:var(--text);}
+  .modal-box p.hint{font-size:11.5px;color:var(--muted);margin-bottom:20px;}
+  .modal-box label{display:block;font-size:12px;font-weight:700;margin-bottom:6px;margin-top:14px;letter-spacing:.3px;text-transform:uppercase;color:var(--muted);}
+  .modal-box input, .modal-box textarea{width:100%;padding:11px 13px;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:9px;font-size:13.5px;font-family:inherit;transition:.25s;}
+  .modal-box input:focus, .modal-box textarea:focus{outline:none;border-color:var(--neon);}
+  .modal-box .actions{display:flex;gap:10px;margin-top:22px;}
+  .modal-box .actions button{flex:1;padding:11px;border-radius:9px;font-weight:700;font-size:13px;border:none;}
+  .btn-cancel{background:rgba(255,255,255,.05);color:var(--text);}
+  .btn-login{background:var(--slate);color:#fff;}
+  .btn-login:hover{background:var(--neon);color:#05070d;}
+  .modal-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:19px;color:var(--muted);}
+  .login-error{color:#c07a7a;font-size:12px;margin-top:12px;display:none;}
+  .login-error.show{display:block;}
+
+  #adminBar{position:fixed;top:0;left:0;right:0;background:var(--panel2);border-bottom:2px solid var(--neon);color:var(--text);z-index:1500;display:none;align-items:center;justify-content:space-between;padding:9px 22px;font-size:12.5px;flex-wrap:wrap;gap:10px;}
+  #adminBar.show{display:flex;}
+  #adminBar .status{color:var(--neon);font-weight:700;display:flex;align-items:center;gap:8px;}
+  #adminBar .status .dot{width:7px;height:7px;background:#4caf50;border-radius:50%;animation:pulse2 1.5s ease-in-out infinite;}
+  @keyframes pulse2{0%,100%{opacity:1;}50%{opacity:.3;}}
+  #adminBar .abtns{display:flex;gap:8px;flex-wrap:wrap;}
+  #adminBar button{background:rgba(255,255,255,.05);color:var(--text);border:1px solid var(--line);padding:7px 13px;border-radius:7px;font-size:12px;font-weight:600;transition:.25s;}
+  #adminBar button:hover{background:var(--neon);color:#05070d;border-color:var(--neon);}
+  #adminBar button.danger:hover{background:#c07a7a;color:#05070d;border-color:#c07a7a;}
+  body.admin-active{padding-top:44px;}
+  body.admin-active header{top:44px;}
+
+  .editable{transition:outline .2s, background .2s;}
+  body.edit-mode .editable{outline:1px dashed rgba(79,168,158,.4);outline-offset:4px;cursor:text;border-radius:6px;}
+  body.edit-mode .editable:hover{background:rgba(79,168,158,.06);}
+  body.edit-mode .editable:focus{outline:2px solid var(--neon);background:rgba(79,168,158,.1);}
+  .add-text-btn{display:none;margin:18px auto 0;background:var(--panel);border:1.5px dashed var(--neon);color:var(--text);padding:9px 18px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.3px;}
+  body.edit-mode .add-text-btn{display:inline-flex;align-items:center;gap:6px;}
+  .add-text-btn:hover{background:var(--neon);color:#05070d;}
+
+  .track-box{max-width:520px;}
+  .track-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:16px 0;}
+  .track-card{background:var(--bg);border:1px solid var(--line);border-radius:11px;padding:13px;}
+  .track-card .num{font-size:22px;font-weight:800;color:var(--gold);}
+  .track-card .lbl{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;}
+  .track-bars{margin-top:10px;max-height:200px;overflow-y:auto;}
+  .track-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:12px;}
+  .track-bar-row .name{width:118px;flex-shrink:0;color:var(--text);text-transform:capitalize;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .track-bar-track{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:6px;height:9px;overflow:hidden;}
+  .track-bar-fill{height:100%;background:linear-gradient(90deg,var(--slate),var(--neon));border-radius:6px;transition:width .6s var(--ease);}
+  .track-bar-row .count{width:28px;text-align:right;color:var(--muted);}
+  .track-actions{display:flex;gap:10px;margin-top:18px;}
+  .track-actions button{flex:1;padding:10px;border-radius:9px;font-weight:700;font-size:12px;border:none;}
+
+  .notif-box{max-width:400px;}
+  .notif-list{max-height:320px;overflow-y:auto;margin-top:14px;}
+  .notif-item{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);}
+  .notif-item:last-child{border-bottom:none;}
+  .notif-item .ic{width:32px;height:32px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+  .notif-item .body2{flex:1;}
+  .notif-item .title2{font-size:12.5px;font-weight:700;color:var(--text);}
+  .notif-item .desc{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .notif-item .stars{color:var(--gold);font-size:11px;}
+  .notif-item .time2{font-size:10px;color:#606676;margin-top:2px;}
+  .notif-empty{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 0;}
+
+  .review-toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(140%);width:330px;max-width:calc(100vw - 32px);background:var(--panel2);border:1px solid var(--line);border-radius:14px;box-shadow:0 25px 60px rgba(0,0,0,.5);padding:22px 22px 18px;z-index:1300;transition:transform .5s var(--ease);border-top:3px solid var(--neon);}
+  .review-toast.show{transform:translateX(-50%) translateY(0);}
+  .review-toast h4{font-size:15px;color:var(--text);margin-bottom:6px;}
+  .review-toast p{font-size:12px;color:var(--muted);margin-bottom:12px;}
+  .stars-input{display:flex;gap:6px;font-size:23px;margin-bottom:12px;justify-content:center;}
+  .stars-input span{cursor:pointer;color:#454b5c;transition:.2s;}
+  .stars-input span.active{color:var(--gold);}
+  .review-toast textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);border-radius:8px;padding:9px 11px;font-size:12px;font-family:inherit;resize:none;height:52px;margin-bottom:12px;}
+  .review-toast .ract{display:flex;gap:8px;}
+  .review-toast .ract button{flex:1;padding:10px;border-radius:8px;font-size:12px;font-weight:700;border:none;}
+  .review-close{position:absolute;top:10px;right:12px;background:none;border:none;font-size:16px;color:var(--muted);}
+  .review-thanks{text-align:center;padding:8px 0;color:var(--text);font-size:13px;font-weight:600;}
+
+  @media(max-width:1000px){
+    nav.mainnav{position:fixed;top:0;right:0;height:100vh;width:290px;background:var(--panel);flex-direction:column;padding:96px 28px;transform:translateX(100%);transition:transform .4s var(--ease);overflow-y:auto;}
+    nav.mainnav.open{transform:translateX(0);}
+    nav.mainnav > ul{flex-direction:column;}
+    nav.mainnav > ul > li > a{padding:15px 0;}
+    nav.mainnav > ul > li > a::after{display:none;}
+    .dropdown{position:static;opacity:1;visibility:visible;transform:none;box-shadow:none;border:none;padding:0 0 0 14px;display:none;max-height:none;}
+    nav.mainnav > ul > li.open .dropdown{display:block;}
+    .burger{display:flex;}
+    .cards3,.newsgrid{grid-template-columns:1fr;}
+    .footgrid{grid-template-columns:1fr 1fr;}
+    .hero h1{font-size:30px;}
+  }
+  @media(prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div id="preloader"><div class="pl-bar"></div><div class="pl-label">Loading KMEFIC</div></div>
+<div id="progress"></div>
+<canvas id="bgcanvas"></canvas>
+
+<div id="adminBar">
+  <div class="status"><span class="dot"></span> Admin Mode Active — click any dashed text to edit</div>
+  <div class="abtns">
+    <button id="btnTracking">📊 Business Tracking</button>
+    <button id="btnSave">💾 Save Changes</button>
+    <button id="btnReset" class="danger">↺ Reset to Default</button>
+    <button id="btnLogout" class="danger">Logout</button>
+  </div>
+</div>
+
+<header id="siteHeader">
+  <div class="container navwrap">
+    <a href="#about" class="logo"><div class="mark"><img src="https://lh3.googleusercontent.com/d/1GWZ96UK9qEBjpqq2VUgC60gNy8RdKOKy=w400" alt="KMEFIC logo" loading="lazy"></div>KME<span>FIC</span></a>
+    <nav class="mainnav" id="mainnav">
+      <ul>
+        <li><a href="#about" data-i18n="nav_about">About Us</a>
+          <ul class="dropdown">
+            <li><a href="#about" data-i18n="about_history">Our History</a></li>
+            <li><a href="#about" data-i18n="about_board">Board of Directors</a></li>
+            <li><a href="#about" data-i18n="about_committees">Committees</a></li>
+            <li><a href="#about" data-i18n="about_exec">Executive Management</a></li>
+          </ul>
+        </li>
+        <li><a href="#services" data-i18n="nav_services">Our Services</a>
+          <ul class="dropdown">
+            <li><a href="#services" data-i18n="svc_asset">Asset Management</a>
+              <ul class="sub">
+                <li><a href="#services" data-i18n="svc_investment_funds">Investment Funds</a>
+                  <ul class="sub">
+                    <li><a href="#services" data-i18n="svc_al_rouyah">Al Rouyah Fund</a></li>
+                    <li><a href="#services" data-i18n="svc_al_huda">Al Huda Islamic Fund</a></li>
+                  </ul>
+                </li>
+                <li><a href="#services" data-i18n="svc_portfolio">Portfolio Management</a></li>
+                <li><a href="#services" data-i18n="svc_market_maker">Market Maker</a></li>
+              </ul>
+            </li>
+            <li><a href="#services" data-i18n="svc_brokerage">Brokerage</a>
+              <ul class="sub"><li><a href="#services" data-i18n="svc_awsat">Awsat E-Trading</a></li></ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#investor" data-i18n="nav_investor">Investor Relations</a>
+          <ul class="dropdown">
+            <li><a href="#investor" data-i18n="ir_quarterly">Quarterly Financial Statements</a></li>
+            <li><a href="#investor" data-i18n="ir_annual">Annual Financial Reports</a></li>
+            <li><a href="#investor" data-i18n="ir_disclosure">Disclosure and Transparency</a></li>
+            <li><a href="#investor" data-i18n="ir_governance">Corporate Governance</a>
+              <ul class="sub">
+                <li><a href="#investor" data-i18n="ir_gov_structure">Governance Structure</a></li>
+                <li><a href="#investor" data-i18n="ir_internal_control">Internal Control</a></li>
+                <li><a href="#investor" data-i18n="ir_code_conduct">Code of Conduct</a></li>
+                <li><a href="#investor" data-i18n="ir_shareholders">Shareholders</a></li>
+                <li><a href="#investor" data-i18n="ir_whistle">Whistle Blowing</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#media" data-i18n="nav_media">Media Center</a>
+          <ul class="dropdown">
+            <li><a href="#media" data-i18n="media_news">KMEFIC News &amp; Disclosures</a></li>
+            <li><a href="#media" data-i18n="media_funds_news">Funds News &amp; Disclosures</a></li>
+            <li><a href="#media" data-i18n="media_press">Media News</a></li>
+            <li><a href="#media" data-i18n="media_social">Social Responsibilities</a></li>
+            <li><a href="#gallery" data-i18n="media_gallery">Gallery</a></li>
+          </ul>
+        </li>
+        <li><a href="#careers" data-i18n="nav_careers">Careers</a>
+          <ul class="dropdown">
+            <li><a href="#careers" data-i18n="careers_culture">Our Culture</a></li>
+            <li><a href="#careers" data-i18n="careers_training">Training &amp; Development</a></li>
+            <li><a href="#careers" data-i18n="careers_kuwaitization">Kuwaitization / Localization</a></li>
+            <li><a href="#careers" data-i18n="careers_comp">Compensation &amp; Benefits</a></li>
+            <li><a href="#careers" data-i18n="careers_job">Job Opening</a></li>
+          </ul>
+        </li>
+        <li><a href="#contact" data-i18n="nav_contact">Contact Us</a></li>
+      </ul>
+    </nav>
+    <div class="navright">
+      <button id="langToggle" type="button">العربية</button>
+      <a href="#" class="cta-btn" data-i18n="nav_online">Online Registration</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="ticker">
+  <div class="ticker-track" id="tickerTrack"></div>
+</div>
+
+<section class="hero" id="about">
+  <div class="cover-photo"><img src="https://lh3.googleusercontent.com/d/12PO2EOAveg8noNTTKsSh24U8KNOGh6kb=w1600" alt="Dream. Plan. Do. Repeat." loading="lazy" onerror="this.parentElement.style.display='none'"></div>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="container">
+    <div class="hero-left">
+      <div class="eyebrow reveal in"><span class="dot"></span> <span data-i18n="hero_kicker">Numbers Speak for Themselves</span></div>
+      <h1 class="reveal in editable" contenteditable="false" data-edit-id="hero-h1" data-i18n="hero_h1">Innovative investment products and services across the GCC and Middle East.</h1>
+      <p class="reveal in editable" contenteditable="false" data-edit-id="hero-sub" data-i18n="hero_sub">KMEFIC leads the region with superior trading and portfolio management technology, robust research, and a legacy of firsts in the market.</p>
+      <div class="actions reveal in">
+        <button class="btn-primary" onclick="document.getElementById('services').scrollIntoView({behavior:'smooth'})"><span data-i18n="services_title">Our Services</span></button>
+        <a href="#contact" class="btn-ghost" data-i18n="nav_contact">Contact Us</a>
+      </div>
+    </div>
+    <div class="hero-right reveal in">
+      <div class="glass">
+        <div class="as-of" data-i18n="hero_asof">Figures as of 31 December 2025</div>
+        <div class="statrow"><span class="label" data-i18n="stat_assets">Total Assets (KD)</span><span class="value" data-count="284500000">0</span></div>
+        <div class="statrow"><span class="label" data-i18n="stat_capital">Share Capital (KD)</span><span class="value" data-count="41200000">0</span></div>
+        <div class="statrow"><span class="label" data-i18n="stat_equity">Total Equity (KD)</span><span class="value" data-count="97600000">0</span></div>
+        <div class="statfoot" data-i18n="stat_footnote">Sample figures for design preview</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container help">
+  <div class="helpcard reveal">
+    <h3 data-i18n="help_title">How can we help?</h3>
+    <select id="selWho">
+      <option value="" data-i18n="help_who_ph">I am: — Please select —</option>
+      <option value="individual" data-i18n="help_who_ind">an Individual</option>
+      <option value="corporate" data-i18n="help_who_corp">a Corporate</option>
+    </select>
+    <select id="selWhat">
+      <option value="" data-i18n="help_what_ph">Looking for: — Please select —</option>
+      <option value="services" data-i18n="svc_asset">Asset Management</option>
+      <option value="services" data-i18n="svc_brokerage">Brokerage</option>
+      <option value="investor" data-i18n="nav_investor">Investor Relations</option>
+      <option value="careers" data-i18n="nav_careers">Careers</option>
+    </select>
+    <button id="btnGo" data-i18n="help_go">Go</button>
+    <div class="help-msg" id="helpMsg" data-i18n="help_msg">Please select both options above to continue.</div>
+  </div>
+</div>
+
+<section class="section" id="services">
+  <div class="container">
+    <div class="section-head reveal"><div class="eyebrow"><span class="dot"></span> <span data-i18n="services_kicker">What We Do</span></div><h2 data-i18n="services_title">Our Services</h2></div>
+    <div class="cards3">
+      <div class="svc-card reveal" style="transition-delay:.05s">
+        <div class="svc-photo"><img src="https://picsum.photos/seed/kmefic-asset/700/500" alt="Asset Management" loading="lazy" onerror="this.remove()"><div class="icon">◆</div></div>
+        <h3 class="editable" contenteditable="false" data-edit-id="svc1-title" data-i18n="svc_asset">Asset Management</h3>
+        <p class="editable" contenteditable="false" data-edit-id="svc1-p" data-i18n="svc1_p">Leading the GCC region with superior trading and portfolio management technology, leveraging robust research to identify dynamic investment opportunities.</p>
+        <div class="extra" id="extra1"><p data-i18n="svc1_extra">Our Asset Management division covers investment funds, discretionary portfolio management, and market-making — serving individual and institutional clients alike.</p></div>
+        <button class="more-btn" data-target="extra1"><span class="rm-label" data-i18n="btn_readmore">Read More</span> <span>→</span></button>
+      </div>
+      <div class="svc-card reveal" style="transition-delay:.15s">
+        <div class="svc-photo"><img src="https://picsum.photos/seed/kmefic-brokerage/700/500" alt="Brokerage" loading="lazy" onerror="this.remove()"><div class="icon">◇</div></div>
+        <h3 class="editable" contenteditable="false" data-edit-id="svc2-title" data-i18n="svc_brokerage">Brokerage</h3>
+        <p class="editable" contenteditable="false" data-edit-id="svc2-p" data-i18n="svc2_p">Online and offline brokerage in Kuwait and across five regional markets via a single platform — including Awsat E-Trading.</p>
+        <div class="extra" id="extra2"><p data-i18n="svc2_extra">A single dashboard for trading across regional exchanges, with real-time data, order routing, and dedicated relationship support.</p></div>
+        <button class="more-btn" data-target="extra2"><span class="rm-label" data-i18n="btn_readmore">Read More</span> <span>→</span></button>
+      </div>
+      <div class="svc-card reveal" style="transition-delay:.25s">
+        <div class="svc-photo"><img src="https://picsum.photos/seed/kmefic-cars/700/500" alt="KMEFIC Cars" loading="lazy" onerror="this.remove()"><div class="icon">◈</div></div>
+        <h3 class="editable" contenteditable="false" data-edit-id="svc3-title" data-i18n="svc_cars">KMEFIC Cars</h3>
+        <p class="editable" contenteditable="false" data-edit-id="svc3-p" data-i18n="svc3_p">Established 2021 — a leading car loans subsidiary that has served over 200 clients, revolutionizing automotive financing.</p>
+        <div class="extra" id="extra3"><p data-i18n="svc3_extra">Flexible financing plans and fast approvals make KMEFIC Cars a trusted partner for financing your next vehicle.</p></div>
+        <button class="more-btn" data-target="extra3"><span class="rm-label" data-i18n="btn_readmore">Read More</span> <span>→</span></button>
+      </div>
+    </div>
+    <div style="text-align:center;">
+      <button class="add-text-btn" data-add-target="services-extra">+ Add Text Block</button>
+    </div>
+    <div id="services-extra"></div>
+  </div>
+</section>
+
+<section class="section compact" id="investor">
+  <div class="container">
+    <div class="section-head reveal" style="text-align:center;">
+      <div class="eyebrow"><span class="dot"></span> <span data-i18n="investor_kicker">Transparency</span></div><h2 data-i18n="investor_title">Investor Relations</h2>
+      <p class="lead editable" contenteditable="false" data-edit-id="investor-lead" data-i18n="investor_lead" style="margin-left:auto;margin-right:auto;">Quarterly and annual disclosures, governance structure, and shareholder information — everything investors need in one place.</p>
+    </div>
+    <div class="chipband reveal">
+      <a href="#investor" data-i18n="ir_quarterly">Quarterly Financial Statements</a>
+      <a href="#investor" data-i18n="ir_annual">Annual Financial Reports</a>
+      <a href="#investor" data-i18n="ir_disclosure">Disclosure &amp; Transparency</a>
+      <a href="#investor" data-i18n="ir_governance">Corporate Governance</a>
+    </div>
+    <div style="text-align:center;">
+      <button class="add-text-btn" data-add-target="investor-extra">+ Add Text Block</button>
+    </div>
+    <div id="investor-extra"></div>
+  </div>
+</section>
+
+<section class="section news" id="media">
+  <div class="container">
+    <div class="section-head reveal"><div class="eyebrow"><span class="dot"></span> <span data-i18n="media_kicker">Stay Informed</span></div><h2 data-i18n="media_title">Latest News</h2></div>
+    <div class="newsgrid">
+      <div class="newscard reveal" style="transition-delay:.05s">
+        <div class="thumb"><img src="https://picsum.photos/seed/kmefic-news1/700/500" alt="" loading="lazy" onerror="this.remove()"></div>
+        <div class="body">
+          <div class="tag" data-i18n="media_news">KMEFIC News &amp; Disclosures</div>
+          <h4 class="editable" contenteditable="false" data-edit-id="news1-title" data-i18n="news1_title">Quarterly disclosure update</h4>
+          <div class="extra" id="nextra1"><p data-i18n="news1_extra">KMEFIC has published its latest quarterly disclosure in line with regulatory requirements.</p></div>
+          <button class="more" data-target="nextra1"><span class="rm-label" data-i18n="btn_readmore">Read More</span></button>
+        </div>
+      </div>
+      <div class="newscard reveal" style="transition-delay:.15s">
+        <div class="thumb"><img src="https://picsum.photos/seed/kmefic-news2/700/500" alt="" loading="lazy" onerror="this.remove()"></div>
+        <div class="body">
+          <div class="tag" data-i18n="media_funds_news">Funds News &amp; Disclosures</div>
+          <h4 class="editable" contenteditable="false" data-edit-id="news2-title" data-i18n="news2_title">Al Rouyah Fund performance note</h4>
+          <div class="extra" id="nextra2"><p data-i18n="news2_extra">An updated performance note for Al Rouyah Fund covering the latest reporting period is now available.</p></div>
+          <button class="more" data-target="nextra2"><span class="rm-label" data-i18n="btn_readmore">Read More</span></button>
+        </div>
+      </div>
+      <div class="newscard reveal" style="transition-delay:.25s">
+        <div class="thumb"><img src="https://picsum.photos/seed/kmefic-news3/700/500" alt="" loading="lazy" onerror="this.remove()"></div>
+        <div class="body">
+          <div class="tag" data-i18n="media_press">Media News</div>
+          <h4 class="editable" contenteditable="false" data-edit-id="news3-title" data-i18n="news3_title">KMEFIC in the press</h4>
+          <div class="extra" id="nextra3"><p data-i18n="news3_extra">Recent coverage highlights KMEFIC's growth across asset management, brokerage, and automotive financing.</p></div>
+          <button class="more" data-target="nextra3"><span class="rm-label" data-i18n="btn_readmore">Read More</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="morenews reveal"><a href="#media" data-i18n="morenews_label">More News →</a></div>
+    <div style="text-align:center;">
+      <button class="add-text-btn" data-add-target="media-extra">+ Add Text Block</button>
+    </div>
+    <div id="media-extra"></div>
+  </div>
+</section>
+
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="section-head reveal" style="text-align:center;"><div class="eyebrow"><span class="dot"></span> <span data-i18n="gallery_kicker">In Pictures</span></div><h2 data-i18n="gallery_title">KMEFIC Gallery</h2></div>
+    <div class="slider" id="gallerySlider">
+      <div class="slider-track" id="sliderTrack">
+        <div class="slide"><img src="https://kmefic.com/wp-content/uploads/2024/11/asset-mgt3.jpg" alt="Asset Management" loading="lazy"><div class="cap" data-i18n="svc_asset">Asset Management</div></div>
+        <div class="slide"><img src="https://kmefic.com/wp-content/uploads/2024/11/brokerage2.jpg" alt="Brokerage" loading="lazy"><div class="cap" data-i18n="gallery_cap2">Brokerage &amp; Awsat E-Trading</div></div>
+        <div class="slide"><img src="https://kmefic.com/wp-content/uploads/2024/06/k2-cars.jpg" alt="KMEFIC Cars" loading="lazy"><div class="cap" data-i18n="svc_cars">KMEFIC Cars</div></div>
+        <div class="slide"><img src="https://kmefic.com/wp-content/uploads/2024/11/interior-1.jpg" alt="KMEFIC Offices" loading="lazy"><div class="cap" data-i18n="gallery_cap4">Our Offices</div></div>
+        <div class="slide"><img src="https://kmefic.com/wp-content/uploads/2025/02/img-profile.jpg" alt="KMEFIC Team" loading="lazy"><div class="cap" data-i18n="gallery_cap5">Our People</div></div>
+        <div class="slide"><img src="https://kmefic.com/wp-content/uploads/2021/12/link-tree-kmefic.jpg" alt="KMEFIC Group" loading="lazy"><div class="cap" data-i18n="gallery_cap6">KMEFIC Group</div></div>
+        <div class="slide"><img src="https://lh3.googleusercontent.com/d/17SPwPLxlQq9BlBRZpJ9NV-oYAMVJ0-1W=w1600" alt="Building Wealth. Securing Futures." loading="lazy"><div class="cap">Building Wealth. Securing Futures.</div></div>
+        <div class="slide"><img src="https://lh3.googleusercontent.com/d/1YtiBYvxg3a0Jfc1Vpc9Q4geFlLXjs8jZ=w1600" alt="Empowering Smarter Financial Decisions" loading="lazy"><div class="cap">Empowering Smarter Financial Decisions</div></div>
+      </div>
+      <button class="slider-btn prev" id="sliderPrev" aria-label="Previous slide">‹</button>
+      <button class="slider-btn next" id="sliderNext" aria-label="Next slide">›</button>
+    </div>
+    <div class="slider-dots" id="sliderDots"></div>
+    <div class="slider-progress"><div class="slider-progress-bar" id="sliderProgress"></div></div>
+    <p style="text-align:center;font-size:11px;color:var(--muted);margin-top:14px;" data-i18n="gallery_source">Images sourced from kmefic.com</p>
+  </div>
+</section>
+
+<section class="section subs">
+  <div class="container">
+    <div class="section-head reveal" style="text-align:center;"><div class="eyebrow"><span class="dot"></span> <span data-i18n="subs_kicker">Group</span></div><h2 data-i18n="subs_title">Subsidiaries</h2></div>
+    <div class="subgrid reveal">
+      <a href="http://www.mefbc.com/" target="_blank" data-i18n="subs_mefbc">MEFBC</a>
+      <a href="#services" data-i18n="svc_cars">KMEFIC Cars</a>
+    </div>
+  </div>
+</section>
+
+<section class="section compact" id="careers">
+  <div class="container">
+    <div class="section-head reveal" style="text-align:center;">
+      <div class="eyebrow"><span class="dot"></span> <span data-i18n="careers_section_kicker">Join Us</span></div><h2 data-i18n="careers_section_title">Careers at KMEFIC</h2>
+      <p class="lead editable" contenteditable="false" data-edit-id="careers-lead" data-i18n="careers_lead" style="margin-left:auto;margin-right:auto;">We invest in our people through training, a strong Kuwaitization program, and competitive compensation.</p>
+    </div>
+    <div class="chipband reveal">
+      <a href="#careers" data-i18n="careers_culture">Our Culture</a>
+      <a href="#careers" data-i18n="careers_training">Training &amp; Development</a>
+      <a href="#careers" data-i18n="careers_comp">Compensation &amp; Benefits</a>
+      <a href="#careers" data-i18n="careers_job">Job Opening</a>
+    </div>
+    <div style="text-align:center;">
+      <button class="add-text-btn" data-add-target="careers-extra">+ Add Text Block</button>
+    </div>
+    <div id="careers-extra"></div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="container">
+    <div class="footgrid">
+      <div>
+        <h5 data-i18n="foot_h_kmefic">KMEFIC</h5>
+        <p style="font-size:13px;max-width:280px;" class="editable" contenteditable="false" data-edit-id="foot-address" data-i18n-html="foot_address">P.O. Box 819, Safat 13009, Kuwait<br>Tel: (+965) 2225-5000<br>customerservice@kmefic.com.kw</p>
+        <div class="social"><a href="#">f</a><a href="#">x</a><a href="#">▶</a></div>
+      </div>
+      <div><h5 data-i18n="foot_h_company">Company</h5><ul><li><a href="#about" data-i18n="nav_about">About Us</a></li><li><a href="#investor" data-i18n="nav_investor">Investor Relations</a></li><li><a href="#media" data-i18n="nav_media">Media Center</a></li><li><a href="#careers" data-i18n="nav_careers">Careers</a></li></ul></div>
+      <div><h5 data-i18n="foot_h_services">Services</h5><ul><li><a href="#services" data-i18n="svc_asset">Asset Management</a></li><li><a href="#services" data-i18n="svc_brokerage">Brokerage</a></li><li><a href="#services" data-i18n="svc_awsat">Awsat E-Trading</a></li><li><a href="#services" data-i18n="svc_cars">KMEFIC Cars</a></li></ul></div>
+      <div><h5 data-i18n="foot_h_quicklinks">Quick Links</h5><ul><li><a href="#" data-i18n="nav_online">Online Registration</a></li><li><a href="#" data-i18n="foot_market_monitor">Market Monitor</a></li><li><a href="#careers" data-i18n="careers_job">Job Opening</a></li><li><a href="#contact" data-i18n="nav_contact">Contact Us</a></li></ul></div>
+    </div>
+    <div class="footbottom">
+      <span class="editable" contenteditable="false" data-edit-id="foot-copy" data-i18n="foot_copy">KMEFIC © 2026. All rights reserved.</span>
+      <button class="admin-link" id="adminTrigger">Admin</button>
+    </div>
+  </div>
+</footer>
+
+<div id="toTop">↑</div>
+<button class="admin-fab" id="adminFab" title="Admin Login">🔒</button>
+<button class="notif-fab" id="notifFab" title="Notifications">🔔<span class="notif-badge" id="notifBadge" style="display:none;">0</span></button>
+
+<button class="wa-fab" id="waFab" title="Chat on WhatsApp">💬</button>
+<div class="wa-panel" id="waPanel">
+  <div class="wa-head">
+    <div class="avatar">KM</div>
+    <div class="info"><b data-i18n="wa_name">KMEFIC Assistant</b><span><span class="online"></span> <span data-i18n="wa_status">Typically replies instantly</span></span></div>
+    <button class="wa-close" id="waClose">×</button>
+  </div>
+  <div class="wa-body" id="waBody"></div>
+  <div class="wa-quick">
+    <button data-key="asset" data-i18n="svc_asset">Asset Management</button>
+    <button data-key="broker" data-i18n="svc_brokerage">Brokerage</button>
+    <button data-key="car" data-i18n="svc_cars">KMEFIC Cars</button>
+    <button data-key="career" data-i18n="nav_careers">Careers</button>
+    <button data-key="human" data-i18n="wa_human">Talk to a human</button>
+  </div>
+  <div class="wa-foot">
+    <input type="text" id="waInput" placeholder="Type a message...">
+    <button id="waSendBtn">➤</button>
+  </div>
+  <button class="wa-cta" id="waContinue" data-i18n="wa_continue">Continue on WhatsApp →</button>
+</div>
+
+<div class="review-toast" id="reviewToast">
+  <button class="review-close" id="reviewClose">×</button>
+  <div id="reviewFormWrap">
+    <h4 data-i18n="review_title">How's your experience?</h4>
+    <p data-i18n="review_prompt">Rate your visit to KMEFIC's website — it helps us improve.</p>
+    <div class="stars-input" id="starsInput">
+      <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+    </div>
+    <textarea id="reviewComment" data-i18n-ph="review_placeholder" placeholder="Optional comment..."></textarea>
+    <div class="ract">
+      <button class="btn-cancel" id="reviewSkip" data-i18n="review_dismiss">Not now</button>
+      <button class="btn-login" id="reviewSubmit" data-i18n="review_submit">Submit</button>
+    </div>
+  </div>
+  <div id="reviewThanksWrap" class="review-thanks" style="display:none;" data-i18n="review_thanks">Thank you for your feedback! 🙏</div>
+</div>
+
+<div class="modal-overlay" id="notifModal">
+  <div class="modal-box notif-box">
+    <button class="modal-close" id="closeNotifModal">×</button>
+    <h3 data-i18n="notif_title">🔔 Notifications</h3>
+    <p class="hint" data-i18n="notif_hint">Live visits and visitor reviews recorded in this browser.</p>
+    <div class="notif-list" id="notifList"></div>
+    <div class="track-actions">
+      <button class="btn-cancel" id="btnClearNotif" data-i18n="notif_clear">Clear All</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="trackModal">
+  <div class="modal-box track-box">
+    <button class="modal-close" id="closeTrackModal">×</button>
+    <h3>📊 Business Tracking</h3>
+    <p class="hint">Visitor activity recorded in this browser. Client-side demo only — not a real multi-visitor analytics server.</p>
+    <div class="track-grid">
+      <div class="track-card"><div class="num" id="trkVisits">0</div><div class="lbl">Total Visits</div></div>
+      <div class="track-card"><div class="num" id="trkEvents">0</div><div class="lbl">Tracked Interactions</div></div>
+      <div class="track-card"><div class="num" id="trkFirst">—</div><div class="lbl">First Visit</div></div>
+      <div class="track-card"><div class="num" style="font-size:13px;" id="trkLast">—</div><div class="lbl">Last Visit</div></div>
+    </div>
+    <div class="track-bars" id="trkBars"></div>
+    <div class="track-actions">
+      <button class="btn-cancel" id="btnExportTrack">⬇ Export CSV</button>
+      <button class="btn-login" id="btnClearTrack" style="background:#c07a7a;color:#05070d;">Clear Data</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="infoModal">
+  <div class="modal-box" style="max-width:420px;">
+    <button class="modal-close" id="closeInfoModal">×</button>
+    <h3 id="infoModalTitle" style="margin-bottom:14px;"></h3>
+    <p class="hint" id="infoModalBody" style="font-size:13px;line-height:1.65;color:var(--text);margin-bottom:6px;"></p>
+    <div class="actions">
+      <button class="btn-cancel" id="infoCloseBtn" data-i18n="info_close">Close</button>
+      <button class="btn-login" id="infoGoBtn" data-i18n="info_view">View Section →</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="loginModal">
+  <div class="modal-box">
+    <button class="modal-close" id="closeModal">×</button>
+    <h3>Admin Portal Login</h3>
+    <p class="hint">Demo credentials — Username: <b>admin</b> &nbsp;Password: <b>KMEFIC@2026</b><br>Client-side demo only (no server / no real security).</p>
+    <label>Username</label>
+    <input type="text" id="inUser" autocomplete="off">
+    <label>Password</label>
+    <input type="password" id="inPass" autocomplete="off">
+    <div class="login-error" id="loginErr">Incorrect username or password.</div>
+    <div class="actions">
+      <button class="btn-cancel" id="cancelLogin">Cancel</button>
+      <button class="btn-login" id="submitLogin">Login</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const I18N = {
+    en: {
+      nav_online: "Online Registration",
+      nav_about: "About Us", nav_services: "Our Services", nav_investor: "Investor Relations",
+      nav_media: "Media Center", nav_careers: "Careers", nav_contact: "Contact Us",
+      about_history: "Our History", about_board: "Board of Directors", about_committees: "Committees", about_exec: "Executive Management",
+      svc_asset: "Asset Management", svc_investment_funds: "Investment Funds", svc_al_rouyah: "Al Rouyah Fund", svc_al_huda: "Al Huda Islamic Fund",
+      svc_portfolio: "Portfolio Management", svc_market_maker: "Market Maker", svc_brokerage: "Brokerage", svc_awsat: "Awsat E-Trading", svc_cars: "KMEFIC Cars",
+      ir_quarterly: "Quarterly Financial Statements", ir_annual: "Annual Financial Reports", ir_disclosure: "Disclosure and Transparency",
+      ir_governance: "Corporate Governance", ir_gov_structure: "Governance Structure", ir_internal_control: "Internal Control",
+      ir_code_conduct: "Code of Conduct", ir_shareholders: "Shareholders", ir_whistle: "Whistle Blowing",
+      media_news: "KMEFIC News & Disclosures", media_funds_news: "Funds News & Disclosures", media_press: "Media News",
+      media_social: "Social Responsibilities", media_gallery: "Gallery",
+      careers_culture: "Our Culture", careers_training: "Training & Development", careers_kuwaitization: "Kuwaitization / Localization",
+      careers_comp: "Compensation & Benefits", careers_job: "Job Opening",
+      hero_kicker: "Numbers Speak for Themselves",
+      hero_h1: "Innovative investment products and services across the GCC and Middle East.",
+      hero_sub: "KMEFIC leads the region with superior trading and portfolio management technology, robust research, and a legacy of firsts in the market.",
+      hero_asof: "Figures as of 31 December 2025",
+      stat_assets: "Total Assets (KD)", stat_capital: "Share Capital (KD)", stat_equity: "Total Equity (KD)",
+      stat_footnote: "Sample figures for design preview",
+      help_title: "How can we help?", help_who_ph: "I am: — Please select —", help_who_ind: "an Individual", help_who_corp: "a Corporate",
+      help_what_ph: "Looking for: — Please select —", help_go: "Go", help_msg: "Please select both options above to continue.",
+      services_kicker: "What We Do", services_title: "Our Services",
+      svc1_p: "Leading the GCC region with superior trading and portfolio management technology, leveraging robust research to identify dynamic investment opportunities.",
+      svc1_extra: "Our Asset Management division covers investment funds, discretionary portfolio management, and market-making — serving individual and institutional clients alike.",
+      svc2_p: "Online and offline brokerage in Kuwait and across five regional markets via a single platform — including Awsat E-Trading.",
+      svc2_extra: "A single dashboard for trading across regional exchanges, with real-time data, order routing, and dedicated relationship support.",
+      svc3_p: "Established 2021 — a leading car loans subsidiary that has served over 200 clients, revolutionizing automotive financing.",
+      svc3_extra: "Flexible financing plans and fast approvals make KMEFIC Cars a trusted partner for financing your next vehicle.",
+      btn_readmore: "Read More",
+      investor_kicker: "Transparency", investor_title: "Investor Relations",
+      investor_lead: "Quarterly and annual disclosures, governance structure, and shareholder information — everything investors need in one place.",
+      media_kicker: "Stay Informed", media_title: "Latest News",
+      news1_title: "Quarterly disclosure update", news1_extra: "KMEFIC has published its latest quarterly disclosure in line with regulatory requirements.",
+      news2_title: "Al Rouyah Fund performance note", news2_extra: "An updated performance note for Al Rouyah Fund covering the latest reporting period is now available.",
+      news3_title: "KMEFIC in the press", news3_extra: "Recent coverage highlights KMEFIC's growth across asset management, brokerage, and automotive financing.",
+      morenews_label: "More News →",
+      gallery_kicker: "In Pictures", gallery_title: "KMEFIC Gallery",
+      gallery_cap2: "Brokerage & Awsat E-Trading", gallery_cap4: "Our Offices", gallery_cap5: "Our People", gallery_cap6: "KMEFIC Group",
+      gallery_source: "Images sourced from kmefic.com",
+      subs_kicker: "Group", subs_title: "Subsidiaries", subs_mefbc: "MEFBC",
+      careers_section_kicker: "Join Us", careers_section_title: "Careers at KMEFIC",
+      careers_lead: "We invest in our people through training, a strong Kuwaitization program, and competitive compensation.",
+      foot_h_kmefic: "KMEFIC", foot_h_company: "Company", foot_h_services: "Services", foot_h_quicklinks: "Quick Links",
+      foot_address: "P.O. Box 819, Safat 13009, Kuwait<br>Tel: (+965) 2225-5000<br>customerservice@kmefic.com.kw",
+      foot_market_monitor: "Market Monitor", foot_copy: "KMEFIC © 2026. All rights reserved.",
+      wa_name: "KMEFIC Assistant", wa_status: "Typically replies instantly", wa_human: "Talk to a human", wa_continue: "Continue on WhatsApp →",
+      review_title: "How's your experience?", review_prompt: "Rate your visit to KMEFIC's website — it helps us improve.",
+      review_placeholder: "Optional comment...", review_dismiss: "Not now", review_submit: "Submit", review_thanks: "Thank you for your feedback! 🙏",
+      notif_title: "🔔 Notifications", notif_hint: "Live visits and visitor reviews recorded in this browser.", notif_clear: "Clear All",
+      notif_visit: "New visitor viewed the site", notif_review: "New review submitted",
+      info_close: "Close", info_view: "View Section →"
+    },
+    ar: {
+      nav_online: "التسجيل الإلكتروني",
+      nav_about: "من نحن", nav_services: "خدماتنا", nav_investor: "علاقات المستثمرين",
+      nav_media: "المركز الإعلامي", nav_careers: "الوظائف", nav_contact: "اتصل بنا",
+      about_history: "تاريخنا", about_board: "مجلس الإدارة", about_committees: "اللجان", about_exec: "الإدارة التنفيذية",
+      svc_asset: "إدارة الأصول", svc_investment_funds: "صناديق الاستثمار", svc_al_rouyah: "صندوق الرؤية", svc_al_huda: "صندوق الهدى الإسلامي",
+      svc_portfolio: "إدارة المحافظ", svc_market_maker: "صانع السوق", svc_brokerage: "الوساطة", svc_awsat: "منصة أوسط للتداول", svc_cars: "كميفك للسيارات",
+      ir_quarterly: "البيانات المالية الفصلية", ir_annual: "التقارير المالية السنوية", ir_disclosure: "الإفصاح والشفافية",
+      ir_governance: "حوكمة الشركات", ir_gov_structure: "هيكل الحوكمة", ir_internal_control: "الرقابة الداخلية",
+      ir_code_conduct: "مدونة السلوك", ir_shareholders: "المساهمون", ir_whistle: "الإبلاغ عن المخالفات",
+      media_news: "أخبار وإفصاحات كميفك", media_funds_news: "أخبار وإفصاحات الصناديق", media_press: "أخبار إعلامية",
+      media_social: "المسؤولية الاجتماعية", media_gallery: "معرض الصور",
+      careers_culture: "ثقافتنا", careers_training: "التدريب والتطوير", careers_kuwaitization: "التكويت",
+      careers_comp: "التعويضات والمزايا", careers_job: "الوظائف الشاغرة",
+      hero_kicker: "الأرقام تتحدث عن نفسها",
+      hero_h1: "منتجات وخدمات استثمارية مبتكرة في دول الخليج والشرق الأوسط.",
+      hero_sub: "تقود كميفك المنطقة بتقنية متفوقة للتداول وإدارة المحافظ، وبحوث قوية، وإرث من الريادة في السوق.",
+      hero_asof: "الأرقام كما في 31 ديسمبر 2025",
+      stat_assets: "إجمالي الأصول (د.ك)", stat_capital: "رأس المال (د.ك)", stat_equity: "إجمالي حقوق الملكية (د.ك)",
+      stat_footnote: "أرقام توضيحية لغرض العرض فقط",
+      help_title: "كيف يمكننا مساعدتك؟", help_who_ph: "أنا: — الرجاء الاختيار —", help_who_ind: "فرد", help_who_corp: "شركة",
+      help_what_ph: "أبحث عن: — الرجاء الاختيار —", help_go: "ابدأ", help_msg: "الرجاء اختيار الخيارين أعلاه للمتابعة.",
+      services_kicker: "ماذا نقدم", services_title: "خدماتنا",
+      svc1_p: "نقود منطقة الخليج بتقنية متفوقة للتداول وإدارة المحافظ، وبحوث قوية لاكتشاف الفرص الاستثمارية.",
+      svc1_extra: "يشرف قسم إدارة الأصول على صناديق الاستثمار وإدارة المحافظ وأنشطة صناعة السوق، ويخدم العملاء الأفراد والمؤسسات.",
+      svc2_p: "خدمات وساطة إلكترونية وتقليدية في الكويت وخمسة أسواق إقليمية عبر منصة واحدة — بما في ذلك منصة أوسط للتداول.",
+      svc2_extra: "لوحة تحكم واحدة للتداول عبر الأسواق الإقليمية، مع بيانات لحظية ودعم مخصص.",
+      svc3_p: "تأسست عام 2021 — شركة تابعة رائدة في تمويل السيارات خدمت أكثر من 200 عميل.",
+      svc3_extra: "خطط تمويل مرنة وموافقات سريعة تجعل كميفك للسيارات شريكاً موثوقاً لتمويل سيارتك القادمة.",
+      btn_readmore: "اقرأ المزيد",
+      investor_kicker: "الشفافية", investor_title: "علاقات المستثمرين",
+      investor_lead: "الإفصاحات الفصلية والسنوية، وهيكل الحوكمة، ومعلومات المساهمين — كل ما يحتاجه المستثمرون في مكان واحد.",
+      media_kicker: "ابق على اطلاع", media_title: "آخر الأخبار",
+      news1_title: "تحديث الإفصاح الفصلي", news1_extra: "نشرت كميفك آخر إفصاحاتها الفصلية وفقاً للمتطلبات التنظيمية.",
+      news2_title: "مذكرة أداء صندوق الرؤية", news2_extra: "مذكرة أداء محدثة لصندوق الرؤية متاحة الآن لقنوات المستثمرين.",
+      news3_title: "كميفك في الإعلام", news3_extra: "تسلط التغطية الأخيرة الضوء على نمو كميفك عبر إدارة الأصول والوساطة وتمويل السيارات.",
+      morenews_label: "المزيد من الأخبار ←",
+      gallery_kicker: "بالصور", gallery_title: "معرض صور كميفك",
+      gallery_cap2: "الوساطة ومنصة أوسط", gallery_cap4: "مكاتبنا", gallery_cap5: "فريقنا", gallery_cap6: "مجموعة كميفك",
+      gallery_source: "الصور من موقع kmefic.com",
+      subs_kicker: "المجموعة", subs_title: "الشركات التابعة", subs_mefbc: "MEFBC",
+      careers_section_kicker: "انضم إلينا", careers_section_title: "الوظائف في كميفك",
+      careers_lead: "نستثمر في موظفينا من خلال التدريب وبرنامج تكويت قوي وتعويضات تنافسية.",
+      foot_h_kmefic: "كميفك", foot_h_company: "الشركة", foot_h_services: "الخدمات", foot_h_quicklinks: "روابط سريعة",
+      foot_address: "ص.ب 819، الصفاة 13009، الكويت<br>هاتف: 2225-5000 (965+)<br>customerservice@kmefic.com.kw",
+      foot_market_monitor: "مراقبة الأسواق", foot_copy: "كميفك © 2026. جميع الحقوق محفوظة.",
+      wa_name: "مساعد كميفك", wa_status: "نرد عادة بشكل فوري", wa_human: "التحدث مع موظف", wa_continue: "المتابعة عبر واتساب ←",
+      review_title: "كيف كانت تجربتك؟", review_prompt: "قيّم زيارتك لموقع كميفك — يساعدنا ذلك على التحسين.",
+      review_placeholder: "تعليق اختياري...", review_dismiss: "ليس الآن", review_submit: "إرسال", review_thanks: "شكراً لملاحظاتك! 🙏",
+      notif_title: "🔔 الإشعارات", notif_hint: "الزيارات وتقييمات الزوار المسجلة في هذا المتصفح.", notif_clear: "مسح الكل",
+      notif_visit: "زائر جديد شاهد الموقع", notif_review: "تقييم جديد تم إرساله",
+      info_close: "إغلاق", info_view: "عرض القسم ←"
+    }
+  };
+
+  const INFO_TEXT = {
+    en: {
+      about_history: "KMEFIC has been active in the Kuwaiti and regional capital markets for several decades, building a track record as one of the region's established investment houses.",
+      about_board: "Our Board of Directors provides strategic oversight and governance, drawing on decades of combined experience across banking, asset management, and regional capital markets.",
+      about_committees: "Board-level committees — including Audit, Risk, and Nomination & Remuneration — support governance oversight across the company's operations.",
+      about_exec: "Our Executive Management team leads day-to-day operations across Asset Management, Brokerage, and our subsidiaries, reporting to the Board of Directors.",
+      svc_investment_funds: "KMEFIC manages a range of investment funds spanning conventional and Shariah-compliant strategies, including Al Rouyah Fund and Al Huda Islamic Fund.",
+      svc_al_rouyah: "Al Rouyah Fund is one of KMEFIC's flagship investment funds, managed by our Asset Management team with a research-led, disciplined strategy.",
+      svc_al_huda: "Al Huda Islamic Fund offers a Shariah-compliant investment option managed under KMEFIC's Asset Management division.",
+      svc_portfolio: "Our discretionary Portfolio Management service tailors investment strategies to each client's risk profile and objectives.",
+      svc_market_maker: "KMEFIC acts as a market maker for select listed securities, helping support liquidity and orderly trading.",
+      svc_awsat: "Awsat E-Trading is KMEFIC's electronic trading platform, giving clients single-dashboard access to Kuwait and regional exchanges.",
+      ir_quarterly: "Quarterly Financial Statements are published in line with regulatory requirements and made available to shareholders and the public.",
+      ir_annual: "Our Annual Financial Reports provide a full-year view of KMEFIC's financial performance, audited and published each year.",
+      ir_disclosure: "KMEFIC is committed to transparent, timely disclosure practices in line with capital markets regulations.",
+      ir_governance: "Our Corporate Governance framework covers board structure, internal control, and shareholder rights.",
+      ir_gov_structure: "The Governance Structure outlines the roles of the Board, its committees, and Executive Management in overseeing the company.",
+      ir_internal_control: "KMEFIC maintains an internal control framework designed to safeguard assets and ensure reliable financial reporting.",
+      ir_code_conduct: "Our Code of Conduct sets out the ethical standards expected of employees, management, and board members.",
+      ir_shareholders: "Shareholder information includes ownership structure, rights, and channels for investor communication.",
+      ir_whistle: "Our Whistle Blowing policy provides a confidential channel for reporting concerns about misconduct or non-compliance.",
+      media_news: "KMEFIC News & Disclosures covers company announcements, regulatory disclosures, and corporate updates.",
+      media_funds_news: "Funds News & Disclosures covers performance updates and disclosures related to KMEFIC-managed funds.",
+      media_press: "Media News features press coverage and mentions of KMEFIC across regional and international outlets.",
+      media_social: "Our Social Responsibility initiatives reflect KMEFIC's commitment to community and sustainability across Kuwait.",
+      careers_culture: "Our Culture is built on collaboration, integrity, and a commitment to professional growth for every employee.",
+      careers_training: "Training & Development programs help employees build skills across finance, trading, and client service.",
+      careers_kuwaitization: "Our Kuwaitization program supports the development and advancement of Kuwaiti national talent within the company.",
+      careers_comp: "We offer competitive Compensation & Benefits packages aligned with regional market standards.",
+      careers_job: "Explore current Job Openings across KMEFIC and its subsidiaries — new opportunities are posted as they become available."
+    },
+    ar: {
+      about_history: "تعمل كميفك في أسواق المال الكويتية والإقليمية منذ عقود، مما رسخ مكانتها كأحد بيوت الاستثمار الراسخة في المنطقة.",
+      about_board: "يقدم مجلس الإدارة الإشراف الاستراتيجي والحوكمة، معتمداً على خبرة تراكمية واسعة في الخدمات المصرفية وإدارة الأصول وأسواق المال الإقليمية.",
+      about_committees: "تدعم لجان مجلس الإدارة -بما فيها لجنة التدقيق والمخاطر والترشيحات والمكافآت- الإشراف على حوكمة عمليات الشركة.",
+      about_exec: "تدير الإدارة التنفيذية العمليات اليومية عبر إدارة الأصول والوساطة والشركات التابعة، وترفع تقاريرها إلى مجلس الإدارة.",
+      svc_investment_funds: "تدير كميفك مجموعة من صناديق الاستثمار التقليدية والمتوافقة مع الشريعة، بما في ذلك صندوق الرؤية وصندوق الهدى الإسلامي.",
+      svc_al_rouyah: "صندوق الرؤية هو أحد صناديق كميفك الرائدة، تديره إدارة الأصول باستراتيجية منضبطة قائمة على البحث.",
+      svc_al_huda: "يقدم صندوق الهدى الإسلامي خياراً استثمارياً متوافقاً مع الشريعة الإسلامية تحت إشراف إدارة الأصول في كميفك.",
+      svc_portfolio: "تُصمم خدمة إدارة المحافظ الاستثمارية وفق ملف المخاطر وأهداف كل عميل.",
+      svc_market_maker: "تعمل كميفك كصانع سوق لأوراق مالية مدرجة مختارة، مما يدعم السيولة والتداول المنظم.",
+      svc_awsat: "منصة أوسط للتداول هي منصة كميفك الإلكترونية التي تمنح العملاء الوصول إلى الكويت والأسواق الإقليمية من لوحة تحكم واحدة.",
+      ir_quarterly: "تُنشر البيانات المالية الفصلية وفقاً للمتطلبات التنظيمية وتُتاح للمساهمين والجمهور.",
+      ir_annual: "تقدم التقارير المالية السنوية صورة كاملة عن الأداء المالي لكميفك بعد تدقيقها ونشرها سنوياً.",
+      ir_disclosure: "تلتزم كميفك بممارسات إفصاح شفافة وفي الوقت المناسب وفقاً لأنظمة أسواق المال.",
+      ir_governance: "يغطي إطار حوكمة الشركات هيكل مجلس الإدارة والرقابة الداخلية وحقوق المساهمين.",
+      ir_gov_structure: "يوضح هيكل الحوكمة أدوار مجلس الإدارة ولجانه والإدارة التنفيذية في الإشراف على الشركة.",
+      ir_internal_control: "تحافظ كميفك على إطار رقابة داخلية مصمم لحماية الأصول وضمان دقة التقارير المالية.",
+      ir_code_conduct: "تحدد مدونة السلوك المعايير الأخلاقية المتوقعة من الموظفين والإدارة وأعضاء مجلس الإدارة.",
+      ir_shareholders: "تشمل معلومات المساهمين هيكل الملكية والحقوق وقنوات التواصل مع المستثمرين.",
+      ir_whistle: "توفر سياسة الإبلاغ عن المخالفات قناة سرية للإبلاغ عن أي سلوك مخالف أو عدم امتثال.",
+      media_news: "تغطي أخبار وإفصاحات كميفك الإعلانات التنظيمية والتحديثات الخاصة بالشركة.",
+      media_funds_news: "تغطي أخبار وإفصاحات الصناديق تحديثات الأداء والإفصاحات المتعلقة بصناديق كميفك.",
+      media_press: "تسلط الأخبار الإعلامية الضوء على التغطية الصحفية لكميفك في وسائل الإعلام الإقليمية والدولية.",
+      media_social: "تعكس مبادرات المسؤولية الاجتماعية التزام كميفك تجاه المجتمع والاستدامة في الكويت.",
+      careers_culture: "تقوم ثقافتنا على التعاون والنزاهة والالتزام بالتطور المهني لكل موظف.",
+      careers_training: "تساعد برامج التدريب والتطوير الموظفين على بناء مهاراتهم في التمويل والتداول وخدمة العملاء.",
+      careers_kuwaitization: "يدعم برنامج التكويت تطوير وتقدم الكوادر الوطنية الكويتية داخل الشركة.",
+      careers_comp: "نقدم حزم تعويضات ومزايا تنافسية تتماشى مع معايير السوق الإقليمية.",
+      careers_job: "تصفح الوظائف الشاغرة الحالية في كميفك وشركاتها التابعة — تُنشر الفرص الجديدة أولاً بأول."
+    }
+  };
+  let currentLang = localStorage.getItem('kmefic_lang') || 'en';
+
+  function applyLang(lang){
+    currentLang = lang;
+    localStorage.setItem('kmefic_lang', lang);
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.body.classList.toggle('lang-ar', lang === 'ar');
+    const dict = I18N[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key = el.getAttribute('data-i18n');
+      if(dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+      const key = el.getAttribute('data-i18n-html');
+      if(dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+      const key = el.getAttribute('data-i18n-ph');
+      if(dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+    });
+    document.getElementById('langToggle').textContent = lang === 'ar' ? 'English' : 'العربية';
+  }
+  document.getElementById('langToggle').addEventListener('click', ()=>{
+    applyLang(currentLang === 'ar' ? 'en' : 'ar');
+    trackEvent('lang_switch_'+currentLang);
+  });
+  applyLang(currentLang);
+
+  function hidePreloader(){ document.getElementById('preloader').classList.add('done'); }
+  window.addEventListener('load', () => setTimeout(hidePreloader, 500));
+  setTimeout(hidePreloader, 4000);
+
+  const header = document.getElementById('siteHeader');
+  const progress = document.getElementById('progress');
+  const toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', () => {
+    const st = window.scrollY;
+    const max = document.body.scrollHeight - window.innerHeight;
+    progress.style.width = (max>0 ? st/max*100 : 0) + '%';
+    header.classList.toggle('shrink', st > 60);
+    toTop.classList.toggle('show', st > 500);
+  });
+  toTop.addEventListener('click', ()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+  const burger = document.getElementById('burger');
+  const mainnav = document.getElementById('mainnav');
+  burger.addEventListener('click', () => { burger.classList.toggle('open'); mainnav.classList.toggle('open'); });
+  function closeMobileNav(){ mainnav.classList.remove('open'); burger.classList.remove('open'); document.querySelectorAll('.mainnav > ul > li.open').forEach(li=>li.classList.remove('open')); }
+  document.querySelectorAll('.mainnav > ul > li').forEach(li=>{
+    const link = li.querySelector('a');
+    const dd = li.querySelector(':scope > .dropdown');
+    if(dd){
+      link.addEventListener('click', e=>{
+        if(window.innerWidth <= 1000){
+          e.preventDefault();
+          const wasOpen = li.classList.contains('open');
+          document.querySelectorAll('.mainnav > ul > li.open').forEach(other=>{ if(other!==li) other.classList.remove('open'); });
+          li.classList.toggle('open', !wasOpen);
+        }
+      });
+    } else {
+      link.addEventListener('click', closeMobileNav);
+    }
+  });
+
+  const infoModal = document.getElementById('infoModal');
+  function showInfoModal(key, targetHref, labelText){
+    const dict = INFO_TEXT[currentLang] || INFO_TEXT.en;
+    document.getElementById('infoModalTitle').textContent = labelText || '';
+    document.getElementById('infoModalBody').textContent = dict[key] || '';
+    infoModal.classList.add('show');
+    document.getElementById('infoGoBtn').onclick = ()=>{
+      infoModal.classList.remove('show');
+      closeMobileNav();
+      const target = document.querySelector(targetHref);
+      if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    };
+    trackEvent('info_'+key);
+  }
+  document.querySelectorAll('.dropdown a[data-i18n]').forEach(a=>{
+    const key = a.getAttribute('data-i18n');
+    if(INFO_TEXT.en[key]){
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        showInfoModal(key, a.getAttribute('href'), a.textContent);
+      });
+    }
+  });
+  document.getElementById('closeInfoModal').addEventListener('click', ()=>infoModal.classList.remove('show'));
+  document.getElementById('infoCloseBtn').addEventListener('click', ()=>infoModal.classList.remove('show'));
+  infoModal.addEventListener('click', (e)=>{ if(e.target===infoModal) infoModal.classList.remove('show'); });
+
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  const co = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        const el = en.target;
+        const target = +el.getAttribute('data-count');
+        const dur = 1800;
+        const start = performance.now();
+        function tick(now){
+          const p = Math.min((now-start)/dur, 1);
+          const eased = 1 - Math.pow(1-p, 3);
+          el.textContent = Math.floor(eased*target).toLocaleString();
+          if(p<1) requestAnimationFrame(tick);
+          else el.textContent = target.toLocaleString();
+        }
+        requestAnimationFrame(tick);
+        co.unobserve(el);
+      }
+    });
+  }, {threshold:.4});
+  document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+
+  document.querySelectorAll('.more-btn, .newscard .more').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.getAttribute('data-target');
+      const extra = document.getElementById(id);
+      if(!extra) return;
+      const open = extra.classList.toggle('open');
+      btn.classList.toggle('open', open);
+      const label = btn.querySelector('.rm-label');
+      if(label) label.textContent = open ? (currentLang==='ar' ? 'عرض أقل' : 'Show Less') : I18N[currentLang].btn_readmore;
+    });
+  });
+
+  const selWho = document.getElementById('selWho');
+  const selWhat = document.getElementById('selWhat');
+  const helpMsg = document.getElementById('helpMsg');
+  document.getElementById('btnGo').addEventListener('click', ()=>{
+    let ok = true;
+    [selWho, selWhat].forEach(s=>{
+      if(!s.value){ s.classList.add('err'); ok=false; setTimeout(()=>s.classList.remove('err'),400); }
+    });
+    if(!ok){ helpMsg.classList.add('show'); return; }
+    helpMsg.classList.remove('show');
+    const target = document.getElementById(selWhat.value);
+    if(target) target.scrollIntoView({behavior:'smooth', block:'start'});
+    trackEvent('help_go_'+selWho.value+'_'+selWhat.value);
+  });
+
+  (function(){
+    const track = document.getElementById('sliderTrack');
+    const dotsWrap = document.getElementById('sliderDots');
+    if(!track) return;
+    const slides = track.children;
+    let idx = 0;
+    for(let i=0;i<slides.length;i++){
+      const d = document.createElement('button');
+      if(i===0) d.classList.add('active');
+      d.addEventListener('click', ()=>{ goTo(i); resetAutoplay(); });
+      dotsWrap.appendChild(d);
+    }
+    const progressBar = document.getElementById('sliderProgress');
+    function restartProgress(){
+      if(!progressBar) return;
+      progressBar.classList.remove('animate');
+      void progressBar.offsetWidth;
+      progressBar.classList.add('animate');
+    }
+    function update(){
+      track.style.transform = 'translateX(-' + (idx*100) + '%)';
+      [...slides].forEach((s,i)=>s.classList.toggle('active', i===idx));
+      [...dotsWrap.children].forEach((d,i)=>d.classList.toggle('active', i===idx));
+    }
+    function goTo(i){ idx = (i+slides.length)%slides.length; update(); }
+    document.getElementById('sliderPrev').addEventListener('click', ()=>{ goTo(idx-1); resetAutoplay(); });
+    document.getElementById('sliderNext').addEventListener('click', ()=>{ goTo(idx+1); resetAutoplay(); });
+    let auto = setInterval(()=>goTo(idx+1), 4500);
+    function resetAutoplay(){ clearInterval(auto); auto = setInterval(()=>goTo(idx+1), 4500); restartProgress(); }
+    const sliderEl = document.getElementById('gallerySlider');
+    sliderEl.addEventListener('mouseenter', ()=>clearInterval(auto));
+    sliderEl.addEventListener('mouseleave', resetAutoplay);
+    update();
+    restartProgress();
+    let startX = 0;
+    track.addEventListener('touchstart', e=>startX = e.touches[0].clientX, {passive:true});
+    track.addEventListener('touchend', e=>{
+      const dx = e.changedTouches[0].clientX - startX;
+      if(dx > 40){ goTo(idx-1); resetAutoplay(); }
+      else if(dx < -40){ goTo(idx+1); resetAutoplay(); }
+    });
+  })();
+
+  const TRACK_KEY = 'kmefic_design3_tracking_v1';
+  function loadTrack(){
+    try{ return JSON.parse(localStorage.getItem(TRACK_KEY)) || {visits:0, events:{}, firstVisit:null, lastVisit:null, notifications:[]}; }
+    catch(e){ return {visits:0, events:{}, firstVisit:null, lastVisit:null, notifications:[]}; }
+  }
+  function saveTrack(t){ localStorage.setItem(TRACK_KEY, JSON.stringify(t)); }
+  let trackData = loadTrack();
+  if(!trackData.notifications) trackData.notifications = [];
+  if(!trackData.firstVisit) trackData.firstVisit = new Date().toISOString();
+  trackData.visits = (trackData.visits||0) + 1;
+  trackData.lastVisit = new Date().toISOString();
+  trackData.notifications.unshift({type:'visit', time:new Date().toISOString(), read:false});
+  trackData.notifications = trackData.notifications.slice(0,40);
+  saveTrack(trackData);
+
+  function trackEvent(name){
+    trackData.events[name] = (trackData.events[name]||0) + 1;
+    saveTrack(trackData);
+  }
+  const sectionIO = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ trackEvent('view_'+en.target.id); } });
+  }, {threshold:.5});
+  ['about','services','investor','media','gallery','careers','contact'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) sectionIO.observe(el);
+  });
+  document.querySelectorAll('.mainnav > ul > li > a').forEach(a=>{
+    a.addEventListener('click', ()=>trackEvent('nav_'+a.textContent.trim().toLowerCase().replace(/\s+/g,'_')));
+  });
+  document.querySelectorAll('.cta-btn').forEach(a=>a.addEventListener('click', ()=>trackEvent('online_registration_click')));
+
+  function renderDashboard(){
+    document.getElementById('trkVisits').textContent = trackData.visits;
+    document.getElementById('trkEvents').textContent = Object.values(trackData.events).reduce((a,b)=>a+b,0);
+    document.getElementById('trkFirst').textContent = trackData.firstVisit ? new Date(trackData.firstVisit).toLocaleDateString() : '—';
+    document.getElementById('trkLast').textContent = trackData.lastVisit ? new Date(trackData.lastVisit).toLocaleString() : '—';
+    const rows = Object.entries(trackData.events).sort((a,b)=>b[1]-a[1]).slice(0,8);
+    const max = rows.length ? rows[0][1] : 1;
+    const wrap = document.getElementById('trkBars');
+    wrap.innerHTML = rows.length ? rows.map(([k,v])=>
+      '<div class="track-bar-row"><div class="name">'+k.replace(/_/g,' ')+'</div><div class="track-bar-track"><div class="track-bar-fill" style="width:'+(v/max*100)+'%"></div></div><div class="count">'+v+'</div></div>'
+    ).join('') : '<p style="font-size:12px;color:var(--muted);">No activity recorded yet — interact with the site to generate data.</p>';
+  }
+  document.getElementById('btnTracking').addEventListener('click', ()=>{
+    renderDashboard();
+    document.getElementById('trackModal').classList.add('show');
+  });
+  document.getElementById('closeTrackModal').addEventListener('click', ()=>document.getElementById('trackModal').classList.remove('show'));
+  document.getElementById('trackModal').addEventListener('click', (e)=>{ if(e.target.id==='trackModal') document.getElementById('trackModal').classList.remove('show'); });
+  document.getElementById('btnExportTrack').addEventListener('click', ()=>{
+    let csv = 'event,count\n';
+    Object.entries(trackData.events).forEach(([k,v])=>csv += k+','+v+'\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'kmefic-tracking-export.csv';
+    a.click();
+  });
+  document.getElementById('btnClearTrack').addEventListener('click', ()=>{
+    if(confirm('Clear all tracking data? This cannot be undone.')){
+      trackData = {visits:0, events:{}, firstVisit:new Date().toISOString(), lastVisit:new Date().toISOString(), notifications:[]};
+      saveTrack(trackData);
+      renderDashboard();
+      renderNotifications();
+    }
+  });
+
+  const notifBadge = document.getElementById('notifBadge');
+  function updateNotifBadge(){
+    const unread = trackData.notifications.filter(n=>!n.read).length;
+    notifBadge.style.display = unread > 0 ? 'flex' : 'none';
+    notifBadge.textContent = unread > 9 ? '9+' : unread;
+  }
+  function renderNotifications(){
+    const wrap = document.getElementById('notifList');
+    if(!trackData.notifications.length){
+      wrap.innerHTML = '<div class="notif-empty">No activity yet.</div>';
+      return;
+    }
+    wrap.innerHTML = trackData.notifications.map(n=>{
+      const time = new Date(n.time).toLocaleString();
+      if(n.type === 'review'){
+        return '<div class="notif-item"><div class="ic">⭐</div><div class="body2"><div class="title2">'+(I18N[currentLang].notif_review)+'</div><div class="stars">'+'★'.repeat(n.rating)+'☆'.repeat(5-n.rating)+'</div>'+(n.comment ? '<div class="desc">"'+n.comment+'"</div>' : '')+'<div class="time2">'+time+'</div></div></div>';
+      }
+      return '<div class="notif-item"><div class="ic">👁️</div><div class="body2"><div class="title2">'+(I18N[currentLang].notif_visit)+'</div><div class="time2">'+time+'</div></div></div>';
+    }).join('');
+  }
+  document.getElementById('notifFab').addEventListener('click', ()=>{
+    renderNotifications();
+    document.getElementById('notifModal').classList.add('show');
+    trackData.notifications.forEach(n=>n.read=true);
+    saveTrack(trackData);
+    updateNotifBadge();
+  });
+  document.getElementById('closeNotifModal').addEventListener('click', ()=>document.getElementById('notifModal').classList.remove('show'));
+  document.getElementById('notifModal').addEventListener('click', (e)=>{ if(e.target.id==='notifModal') document.getElementById('notifModal').classList.remove('show'); });
+  document.getElementById('btnClearNotif').addEventListener('click', ()=>{
+    trackData.notifications = [];
+    saveTrack(trackData);
+    renderNotifications();
+    updateNotifBadge();
+  });
+  updateNotifBadge();
+
+  const reviewToast = document.getElementById('reviewToast');
+  const REVIEW_SHOWN_KEY = 'kmefic_review_shown_session';
+  let selectedStars = 0;
+  document.querySelectorAll('#starsInput span').forEach(s=>{
+    s.addEventListener('click', ()=>{
+      selectedStars = +s.getAttribute('data-v');
+      document.querySelectorAll('#starsInput span').forEach(x=>x.classList.toggle('active', +x.getAttribute('data-v') <= selectedStars));
+    });
+  });
+  function showReview(){
+    if(sessionStorage.getItem(REVIEW_SHOWN_KEY)) return;
+    sessionStorage.setItem(REVIEW_SHOWN_KEY, '1');
+    reviewToast.classList.add('show');
+  }
+  setTimeout(showReview, 25000);
+  window.addEventListener('scroll', function scrollTrigger(){
+    if(window.scrollY > document.body.scrollHeight * 0.5){ showReview(); window.removeEventListener('scroll', scrollTrigger); }
+  });
+  document.getElementById('reviewClose').addEventListener('click', ()=>reviewToast.classList.remove('show'));
+  document.getElementById('reviewSkip').addEventListener('click', ()=>{ reviewToast.classList.remove('show'); trackEvent('review_dismissed'); });
+  document.getElementById('reviewSubmit').addEventListener('click', ()=>{
+    if(selectedStars === 0){ document.getElementById('starsInput').style.animation='shake .4s'; setTimeout(()=>document.getElementById('starsInput').style.animation='',400); return; }
+    const comment = document.getElementById('reviewComment').value.trim();
+    trackData.notifications.unshift({type:'review', rating:selectedStars, comment, time:new Date().toISOString(), read:false});
+    trackData.notifications = trackData.notifications.slice(0,40);
+    saveTrack(trackData);
+    trackEvent('review_submitted_'+selectedStars+'_stars');
+    updateNotifBadge();
+    document.getElementById('reviewFormWrap').style.display = 'none';
+    document.getElementById('reviewThanksWrap').style.display = 'block';
+    setTimeout(()=>reviewToast.classList.remove('show'), 2200);
+  });
+
+  const symbols = [
+    {n:'KMEFIC', v:'182.4', c:'+1.2%', up:true},
+    {n:'AL ROUYAH FUND', v:'96.7', c:'+0.6%', up:true},
+    {n:'AL HUDA ISLAMIC', v:'104.2', c:'-0.3%', up:false},
+    {n:'KSE INDEX', v:'7,412', c:'+0.9%', up:true},
+    {n:'DFM', v:'4,120', c:'-0.2%', up:false},
+    {n:'ADX', v:'9,845', c:'+1.5%', up:true},
+    {n:'MSM30', v:'4,590', c:'+0.4%', up:true}
+  ];
+  const track = document.getElementById('tickerTrack');
+  const build = () => symbols.map(s=>`<span><b>${s.n}</b> ${s.v} <span class="${s.up?'up':'down'}">${s.c}</span></span>`).join('');
+  track.innerHTML = build() + build();
+
+  const canvas = document.getElementById('bgcanvas');
+  const ctx = canvas.getContext('2d');
+  let w, h, particles = [];
+  function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const COUNT = window.innerWidth < 700 ? 30 : 55;
+  for(let i=0;i<COUNT;i++){
+    particles.push({ x: Math.random()*w, y: Math.random()*h, vx: (Math.random()-.5)*.25, vy: (Math.random()-.5)*.25, r: Math.random()*1.5+.4, hue: Math.random()>.5 });
+  }
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    particles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0) p.x=w; if(p.x>w) p.x=0;
+      if(p.y<0) p.y=h; if(p.y>h) p.y=0;
+      ctx.fillStyle = p.hue ? 'rgba(0,229,199,.55)' : 'rgba(255,47,184,.45)';
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const a=particles[i], b=particles[j];
+        const d = Math.hypot(a.x-b.x, a.y-b.y);
+        if(d<110){
+          ctx.strokeStyle = `rgba(124,108,240,${(1-d/110)*.16})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  const ADMIN_USER = 'admin';
+  const ADMIN_PASS = 'KMEFIC@2026';
+
+  const modal = document.getElementById('loginModal');
+  const openModal = ()=>{ modal.classList.add('show'); document.getElementById('inUser').focus(); };
+  const closeModalFn = ()=>{ modal.classList.remove('show'); document.getElementById('loginErr').classList.remove('show'); document.getElementById('inUser').value=''; document.getElementById('inPass').value=''; };
+
+  document.getElementById('adminFab').addEventListener('click', openModal);
+  document.getElementById('adminTrigger').addEventListener('click', openModal);
+  document.getElementById('closeModal').addEventListener('click', closeModalFn);
+  document.getElementById('cancelLogin').addEventListener('click', closeModalFn);
+  modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModalFn(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape' && modal.classList.contains('show')) closeModalFn(); });
+
+  function doLogin(){
+    const u = document.getElementById('inUser').value.trim();
+    const p = document.getElementById('inPass').value;
+    if(u === ADMIN_USER && p === ADMIN_PASS){ closeModalFn(); enterAdminMode(); trackEvent('admin_login_success'); }
+    else { document.getElementById('loginErr').classList.add('show'); trackEvent('admin_login_failed'); }
+  }
+  document.getElementById('submitLogin').addEventListener('click', doLogin);
+  document.getElementById('inPass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+
+  function enterAdminMode(){
+    document.body.classList.add('admin-active','edit-mode');
+    document.getElementById('adminBar').classList.add('show');
+    document.querySelectorAll('.editable').forEach(el=>el.setAttribute('contenteditable','true'));
+  }
+  function exitAdminMode(){
+    document.body.classList.remove('admin-active','edit-mode');
+    document.getElementById('adminBar').classList.remove('show');
+    document.querySelectorAll('.editable').forEach(el=>el.setAttribute('contenteditable','false'));
+  }
+  document.getElementById('btnLogout').addEventListener('click', exitAdminMode);
+
+  function saveEdits(){
+    const data = { texts:{}, blocks:{} };
+    document.querySelectorAll('[data-edit-id]').forEach(el=>{ data.texts[el.getAttribute('data-edit-id')] = el.innerHTML; });
+    document.querySelectorAll('[id$="-extra"]').forEach(container=>{ data.blocks[container.id] = container.innerHTML; });
+    localStorage.setItem('kmefic_design3_edits_v1', JSON.stringify(data));
+    const btn = document.getElementById('btnSave');
+    const old = btn.textContent;
+    btn.textContent = '✓ Saved';
+    setTimeout(()=>btn.textContent = old, 1500);
+  }
+  document.getElementById('btnSave').addEventListener('click', saveEdits);
+
+  document.getElementById('btnReset').addEventListener('click', ()=>{
+    if(confirm('Reset all edits back to the original default content? This cannot be undone.')){
+      localStorage.removeItem('kmefic_design3_edits_v1');
+      location.reload();
+    }
+  });
+
+  (function loadEdits(){
+    const raw = localStorage.getItem('kmefic_design3_edits_v1');
+    if(!raw) return;
+    try{
+      const data = JSON.parse(raw);
+      Object.keys(data.texts||{}).forEach(id=>{
+        const el = document.querySelector('[data-edit-id="'+id+'"]');
+        if(el) el.innerHTML = data.texts[id];
+      });
+      Object.keys(data.blocks||{}).forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) el.innerHTML = data.blocks[id];
+      });
+    }catch(e){ console.warn('Could not load saved edits', e); }
+  })();
+
+  document.querySelectorAll('.add-text-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const target = document.getElementById(btn.getAttribute('data-add-target'));
+      if(!target) return;
+      const p = document.createElement('p');
+      p.className = 'editable';
+      p.setAttribute('contenteditable','true');
+      p.style.marginTop = '14px';
+      p.style.color = 'var(--muted)';
+      p.style.fontSize = '14px';
+      p.textContent = 'New text block — click here to edit this content.';
+      target.appendChild(p);
+      p.focus();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
